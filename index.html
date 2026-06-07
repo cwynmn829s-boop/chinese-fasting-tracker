@@ -7,8 +7,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="断食计时器">
     <meta name="theme-color" content="#F2F2F7">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3241/3241473.png">
-    <link rel="manifest" href="/manifest.json?v=11">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json?v=13">
     <title>断食计时器</title>
     <style>
         :root {
@@ -263,7 +264,7 @@
 
     <script>
         // Force update logic
-        const SW_VERSION = 'v11';
+        const SW_VERSION = 'v13';
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js?v=' + SW_VERSION).then(reg => {
