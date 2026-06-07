@@ -24,38 +24,49 @@
             --glass: rgba(255, 255, 255, 0.7);
         }
 
-        /* 强制隐藏所有滚动条 */
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
+        /* 100% 隐藏所有滚动条，锁定根视图 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            background-color: var(--ios-bg);
+        }
+
+        /* 主包装容器，处理内部滚动 */
+        #app-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll !important;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
             scrollbar-width: none !important;
             -ms-overflow-style: none !important;
         }
 
+        #app-wrapper::-webkit-scrollbar, 
         *::-webkit-scrollbar {
             display: none !important;
             width: 0 !important;
             height: 0 !important;
         }
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            overflow-x: hidden;
-            background-color: var(--ios-bg);
-            scrollbar-width: none !important;
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
             color: var(--ios-label);
-            padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
         .header { width: 100%; padding: 34px 4px 12px; }
@@ -76,6 +87,7 @@
             align-items: center;
             margin-top: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            flex-shrink: 0;
         }
 
         /* 断食方案选择 */
@@ -135,7 +147,7 @@
         .stat-lab { font-size: 10px; color: var(--ios-secondary-label); margin-top: 4px; }
 
         /* 通用区块样式 */
-        .tool-section { width: 100%; max-width: 400px; margin-top: 24px; }
+        .tool-section { width: 100%; max-width: 400px; margin-top: 24px; flex-shrink: 0; }
         .section-title { font-size: 13px; color: var(--ios-secondary-label); text-transform: uppercase; margin-bottom: 8px; padding-left: 16px; }
         
         .tool-card {
@@ -169,7 +181,7 @@
         .zoom-btn { background: #F2F2F7; border: none; border-radius: 6px; padding: 4px 8px; font-size: 12px; color: var(--ios-secondary-label); }
 
         /* 历史记录 */
-        .history-list { background: var(--ios-group-bg); border-radius: 12px; overflow: hidden; }
+        .history-list { background: var(--ios-group-bg); border-radius: 12px; overflow: hidden; margin-bottom: 32px; }
         .history-row-wrapper { position: relative; overflow: hidden; background-color: var(--ios-danger); }
         .history-item { background: var(--ios-group-bg); display: flex; justify-content: space-between; padding: 14px 16px; position: relative; z-index: 2; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); border-bottom: 0.5px solid var(--ios-separator); }
         .history-item:last-child { border-bottom: none; }
@@ -178,69 +190,68 @@
     </style>
 </head>
 <body>
-    <div class="header"><h1>断食计时器</h1></div>
+    <div id="app-wrapper">
+        <div class="header"><h1>断食计时器</h1></div>
 
-    <div class="main-widget">
-        <!-- 方案选择：20:4 排首位 -->
-        <div class="protocol-selector" id="protocolList">
-            <div class="protocol-chip" data-hours="20">20:4</div>
-            <div class="protocol-chip" data-hours="16">16:8</div>
-            <div class="protocol-chip" data-hours="18">18:6</div>
-        </div>
-        <div id="timer" class="timer">00:00:00</div>
-        <button id="toggleBtn" class="action-btn">开始</button>
-
-        <div class="stats-grid">
-            <div class="stat-card"><span class="stat-val" id="statTotal">0</span><span class="stat-lab">总小时</span></div>
-            <div class="stat-card"><span class="stat-val" id="statStreak">0</span><span class="stat-lab">连续天数</span></div>
-            <div class="stat-card"><span class="stat-val" id="statRate">0%</span><span class="stat-lab">完成率</span></div>
-        </div>
-    </div>
-
-    <!-- 饮水追踪：带容量设置和居中显示 -->
-    <div class="tool-section">
-        <div class="section-title">饮水追踪</div>
-        <div class="tool-card">
-            <div class="water-header">
-                <span>杯容量设置</span>
-                <select class="cup-selector" id="cupSizeSelect">
-                    <option value="100">100ml</option>
-                    <option value="200">200ml</option>
-                    <option value="250" selected>250ml</option>
-                    <option value="300">300ml</option>
-                    <option value="400">400ml</option>
-                    <option value="500">500ml</option>
-                </select>
+        <div class="main-widget">
+            <div class="protocol-selector" id="protocolList">
+                <div class="protocol-chip" data-hours="20">20:4</div>
+                <div class="protocol-chip" data-hours="16">16:8</div>
+                <div class="protocol-chip" data-hours="18">18:6</div>
             </div>
-            <div class="water-controls">
-                <button class="water-btn" id="waterSub">−</button>
-                <div class="water-display" id="waterDisplay">0ml / 0杯</div>
-                <button class="water-btn" id="waterAdd">+</button>
+            <div id="timer" class="timer">00:00:00</div>
+            <button id="toggleBtn" class="action-btn">开始</button>
+
+            <div class="stats-grid">
+                <div class="stat-card"><span class="stat-val" id="statTotal">0</span><span class="stat-lab">总小时</span></div>
+                <div class="stat-card"><span class="stat-val" id="statStreak">0</span><span class="stat-lab">连续天数</span></div>
+                <div class="stat-card"><span class="stat-val" id="statRate">0%</span><span class="stat-lab">完成率</span></div>
             </div>
         </div>
-    </div>
 
-    <!-- 体重记录：曲线图 -->
-    <div class="tool-section">
-        <div class="section-title">体重曲线 (公斤)</div>
-        <div class="tool-card">
-            <div class="weight-input-container">
-                <span>记录今日体重</span>
-                <input type="number" step="0.1" class="weight-input" id="weightInput" placeholder="0.0">
-            </div>
-            <div class="chart-container">
-                <canvas id="weightChart"></canvas>
-            </div>
-            <div class="chart-controls">
-                <button class="zoom-btn" onclick="zoomChart(0.8)">放大</button>
-                <button class="zoom-btn" onclick="zoomChart(1.2)">缩小</button>
+        <div class="tool-section">
+            <div class="section-title">饮水追踪</div>
+            <div class="tool-card">
+                <div class="water-header">
+                    <span>杯容量设置</span>
+                    <select class="cup-selector" id="cupSizeSelect">
+                        <option value="100">100ml</option>
+                        <option value="200">200ml</option>
+                        <option value="250" selected>250ml</option>
+                        <option value="300">300ml</option>
+                        <option value="400">400ml</option>
+                        <option value="500">500ml</option>
+                    </select>
+                </div>
+                <div class="water-controls">
+                    <button class="water-btn" id="waterSub">−</button>
+                    <div class="water-display" id="waterDisplay">0ml / 0杯</div>
+                    <button class="water-btn" id="waterAdd">+</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="tool-section">
-        <div class="section-title">历史记录</div>
-        <div class="history-list" id="historyList"></div>
+        <div class="tool-section">
+            <div class="section-title">体重曲线 (公斤)</div>
+            <div class="tool-card">
+                <div class="weight-input-container">
+                    <span>记录今日体重</span>
+                    <input type="number" step="0.1" class="weight-input" id="weightInput" placeholder="0.0">
+                </div>
+                <div class="chart-container">
+                    <canvas id="weightChart"></canvas>
+                </div>
+                <div class="chart-controls">
+                    <button class="zoom-btn" onclick="zoomChart(0.8)">放大</button>
+                    <button class="zoom-btn" onclick="zoomChart(1.2)">缩小</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <div class="section-title">历史记录</div>
+            <div class="history-list" id="historyList"></div>
+        </div>
     </div>
 
     <script>
