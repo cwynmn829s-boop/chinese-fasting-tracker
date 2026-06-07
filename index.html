@@ -4,23 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="断食计时器">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#F2F2F7">
     <link rel="apple-touch-icon" href="https://img.icons8.com/plasticine/512/apple-health.png">
     <link rel="manifest" href="manifest.json">
     <title>断食计时器</title>
     <style>
         :root {
-            --ios-bg: #f2f2f7;
+            --ios-bg: #F2F2F7;
+            --ios-group-bg: #FFFFFF;
+            --ios-label: #000000;
+            --ios-secondary-label: #8E8E93;
+            --ios-separator: #C6C6C8;
+            --ios-accent: #34C759; /* Green Keynote */
+            --ios-danger: #FF3B30; /* Native iOS Delete Red */
             --glass: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --accent: #34c759;
-            --text-main: #000000;
-            --text-secondary: #8e8e93;
-            --danger: #ff3b30;
-            --success: #34c759;
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
         }
 
         * {
@@ -32,12 +31,9 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
             background-color: var(--ios-bg);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(52, 199, 89, 0.05) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(52, 199, 89, 0.05) 0px, transparent 50%);
-            color: var(--text-main);
+            color: var(--ios-label);
             margin: 0;
-            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+            padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -46,160 +42,176 @@
 
         .header {
             width: 100%;
-            padding: 40px 0 20px;
+            padding: 34px 4px 12px;
             text-align: left;
-            animation: fadeIn 0.8s ease-out;
         }
 
         h1 {
             font-size: 34px;
-            font-weight: 800;
+            font-weight: 700;
             margin: 0;
-            letter-spacing: -1px;
-            background: linear-gradient(135deg, #000 0%, #34c759 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
 
+        /* Main Widget Card - iOS 26 Glassmorphic */
         .main-widget {
             background: var(--glass);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 0.5px solid rgba(0, 0, 0, 0.05);
+            border-radius: 30px;
             width: 100%;
             max-width: 400px;
-            padding: 45px 20px;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 20px;
-            box-shadow: var(--shadow);
-            animation: scaleIn 0.6s cubic-bezier(0.15, 0.85, 0.35, 1);
+            margin-top: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            animation: scaleIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .status-pill {
-            background: rgba(52, 199, 89, 0.1);
-            padding: 8px 18px;
-            border-radius: 25px;
+            padding: 4px 14px;
+            border-radius: 10px;
             font-size: 14px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            letter-spacing: 0.5px;
-            margin-bottom: 30px;
-            transition: all 0.4s ease;
+            font-weight: 600;
+            color: var(--ios-secondary-label);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
 
         .status-pill.active {
-            color: var(--accent);
-            background: rgba(52, 199, 89, 0.15);
-            box-shadow: 0 0 15px rgba(52, 199, 89, 0.1);
+            color: var(--ios-accent);
+            background: rgba(52, 199, 89, 0.1);
         }
 
         .timer {
-            font-size: 72px;
+            font-size: 64px;
             font-weight: 200;
             font-variant-numeric: tabular-nums;
-            margin-bottom: 45px;
-            letter-spacing: -3px;
+            margin-bottom: 30px;
+            letter-spacing: -1.5px;
         }
 
         .action-btn {
-            background: var(--accent);
+            background: var(--ios-accent);
             color: white;
             border: none;
-            width: 90px;
-            height: 90px;
-            border-radius: 45px;
-            font-size: 18px;
-            font-weight: 700;
+            width: 72px;
+            height: 72px;
+            border-radius: 36px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.2s, background-color 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 10px 25px rgba(52, 199, 89, 0.3);
+            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2);
         }
 
         .action-btn:active {
-            transform: scale(0.9);
-            box-shadow: 0 5px 15px rgba(52, 199, 89, 0.2);
+            transform: scale(0.92);
         }
 
         .action-btn.stop {
-            background: var(--danger);
-            box-shadow: 0 10px 25px rgba(255, 59, 48, 0.3);
+            background: var(--ios-danger);
+            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2);
         }
 
+        /* Native iOS Grouped List Style */
         .history-section {
             width: 100%;
             max-width: 400px;
-            margin-top: 45px;
-            animation: fadeInUp 0.8s ease-out;
+            margin-top: 32px;
         }
 
         .history-header {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            padding-left: 10px;
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--ios-secondary-label);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            padding-left: 16px;
         }
 
         .history-list {
+            background: var(--ios-group-bg);
+            border-radius: 12px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 12px;
         }
 
-        .swipe-container {
+        .history-row-wrapper {
             position: relative;
-            width: 100%;
-            height: 72px;
-            border-radius: 24px;
             overflow: hidden;
-            background: var(--danger);
+            background-color: var(--ios-danger);
+        }
+
+        .history-item {
+            background: var(--ios-group-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        .history-item::after {
+            content: "";
+            position: absolute;
+            left: 16px;
+            right: 0;
+            bottom: 0;
+            height: 0.5px;
+            background-color: var(--ios-separator);
+        }
+
+        .history-row-wrapper:last-child .history-item::after {
+            display: none;
         }
 
         .delete-btn {
             position: absolute;
             right: 0;
             top: 0;
-            height: 100%;
+            bottom: 0;
             width: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background-color: var(--ios-danger);
             color: white;
-            font-weight: 700;
-            font-size: 14px;
-        }
-
-        .history-item {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 0 20px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            z-index: 2;
-            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            font-size: 15px;
+            font-weight: 500;
+            z-index: 1;
         }
 
-        .history-date { font-size: 17px; font-weight: 500; }
-        .history-duration { font-size: 17px; font-weight: 600; color: var(--accent); }
+        .history-date {
+            font-size: 17px;
+            font-weight: 400;
+        }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .history-duration {
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--ios-secondary-label);
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Swipe State */
+        .swiped .history-item {
+            transform: translateX(-80px);
+        }
     </style>
 </head>
 <body>
@@ -208,21 +220,34 @@
     </div>
 
     <div class="main-widget">
-        <div id="status" class="status-pill">准备中</div>
+        <div id="status" class="status-pill">待机中</div>
         <div id="timer" class="timer">00:00:00</div>
         <button id="toggleBtn" class="action-btn">开始</button>
     </div>
 
     <div class="history-section">
-        <div class="history-header">历史记录</div>
-        <div class="history-list" id="historyList"></div>
+        <div class="history-header">最近记录</div>
+        <div class="history-list" id="historyList">
+            <!-- Items -->
+        </div>
     </div>
 
     <script>
-        // Haptic function
-        const haptic = (strength = 10) => {
-            if ('vibrate' in navigator) navigator.vibrate(strength);
-        };
+        // PWA update logic
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js?v=4').then(reg => {
+                    reg.onupdatefound = () => {
+                        const installingWorker = reg.installing;
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                window.location.reload();
+                            }
+                        };
+                    };
+                });
+            });
+        }
 
         let startTime = localStorage.getItem('fastStartTime');
         let history = JSON.parse(localStorage.getItem('fastHistory') || '[]');
@@ -232,10 +257,16 @@
         const historyList = document.getElementById('historyList');
         let interval;
 
+        function haptic() {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(15);
+            }
+        }
+
         function updateDisplay() {
             if (!startTime) {
                 timerDisplay.textContent = "00:00:00";
-                statusDisplay.textContent = "准备中";
+                statusDisplay.textContent = "待机中";
                 statusDisplay.classList.remove('active');
                 toggleBtn.textContent = "开始";
                 toggleBtn.classList.remove('stop');
@@ -245,19 +276,19 @@
 
             const now = new Date().getTime();
             const diff = now - parseInt(startTime);
-            const hours = Math.floor(diff / 3600000);
-            const minutes = Math.floor((diff % 3600000) / 60000);
-            const seconds = Math.floor((diff % 60000) / 1000);
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
             timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
             statusDisplay.textContent = "断食中";
             statusDisplay.classList.add('active');
-            toggleBtn.textContent = "停止";
+            toggleBtn.textContent = "结束";
             toggleBtn.classList.add('stop');
         }
 
         function deleteItem(index) {
-            haptic(20);
+            haptic();
             history.splice(index, 1);
             localStorage.setItem('fastHistory', JSON.stringify(history));
             renderHistory();
@@ -265,84 +296,76 @@
 
         function renderHistory() {
             if (history.length === 0) {
-                historyList.innerHTML = '<div style="text-align:center;color:#8e8e93;padding:20px;">暂无数据</div>';
+                historyList.innerHTML = '<div class="history-item"><span class="history-date" style="color: #8e8e93">暂无记录</span></div>';
                 return;
             }
             
-            historyList.innerHTML = history.slice().reverse().map((f, i) => {
-                const actualIndex = history.length - 1 - i;
-                return `
-                    <div class="swipe-container">
-                        <div class="delete-btn" onclick="deleteItem(${actualIndex})">删除</div>
-                        <div class="history-item" 
-                             ontouchstart="handleTouchStart(event)" 
-                             ontouchmove="handleTouchMove(event)" 
-                             ontouchend="handleTouchEnd(event)">
-                            <span class="history-date">${new Date(f.end).toLocaleDateString('zh-CN', {month:'short', day:'numeric'})}</span>
-                            <span class="history-duration">${f.duration}</span>
-                        </div>
+            historyList.innerHTML = '';
+            history.slice().reverse().forEach((item, revIdx) => {
+                const idx = history.length - 1 - revIdx;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'history-row-wrapper';
+                wrapper.innerHTML = `
+                    <div class="delete-btn" onclick="deleteItem(${idx})">删除</div>
+                    <div class="history-item" id="item-${idx}">
+                        <span class="history-date">${new Date(item.end).toLocaleDateString('zh-CN', {month: 'short', day: 'numeric'})}</span>
+                        <span class="history-duration">${item.duration}</span>
                     </div>
                 `;
-            }).join('');
-        }
+                
+                const itemEl = wrapper.querySelector('.history-item');
+                let startX = 0;
+                let currentX = 0;
 
-        // Swipe logic
-        let xDown = null;
-        let currentItem = null;
+                itemEl.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                }, {passive: true});
 
-        function handleTouchStart(evt) {
-            xDown = evt.touches[0].clientX;
-            currentItem = evt.currentTarget;
-            currentItem.style.transition = 'none';
-        }
+                itemEl.addEventListener('touchmove', (e) => {
+                    currentX = e.touches[0].clientX;
+                    const diff = startX - currentX;
+                    if (diff > 0 && diff < 100) {
+                        itemEl.style.transform = `translateX(-${diff}px)`;
+                    }
+                }, {passive: true});
 
-        function handleTouchMove(evt) {
-            if (!xDown) return;
-            let xDiff = xDown - evt.touches[0].clientX;
-            if (xDiff > 0) {
-                let move = Math.min(xDiff, 80);
-                currentItem.style.transform = `translateX(-${move}px)`;
-            } else {
-                currentItem.style.transform = `translateX(0px)`;
-            }
-        }
+                itemEl.addEventListener('touchend', (e) => {
+                    const diff = startX - currentX;
+                    if (diff > 40) {
+                        wrapper.classList.add('swiped');
+                        itemEl.style.transform = `translateX(-80px)`;
+                    } else {
+                        wrapper.classList.remove('swiped');
+                        itemEl.style.transform = `translateX(0)`;
+                    }
+                });
 
-        function handleTouchEnd(evt) {
-            currentItem.style.transition = 'transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
-            let xDiff = xDown - evt.changedTouches[0].clientX;
-            if (xDiff > 40) {
-                currentItem.style.transform = `translateX(-80px)`;
-                haptic(5);
-            } else {
-                currentItem.style.transform = `translateX(0px)`;
-            }
-            xDown = null;
+                historyList.appendChild(wrapper);
+            });
         }
 
         toggleBtn.onclick = () => {
-            haptic(15);
+            haptic();
             if (startTime) {
-                history.push({ end: new Date().getTime(), duration: timerDisplay.textContent });
+                const duration = timerDisplay.textContent;
+                history.push({ end: new Date().getTime(), duration });
                 localStorage.setItem('fastHistory', JSON.stringify(history));
                 localStorage.removeItem('fastStartTime');
                 startTime = null;
-                renderHistory();
             } else {
                 startTime = new Date().getTime().toString();
                 localStorage.setItem('fastStartTime', startTime);
                 interval = setInterval(updateDisplay, 1000);
             }
             updateDisplay();
+            renderHistory();
         };
 
-        if (startTime) { interval = setInterval(updateDisplay, 1000); updateDisplay(); }
-        renderHistory();
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js?v=ios26-v2');
-            });
+        if (startTime) {
+            interval = setInterval(updateDisplay, 1000);
+            updateDisplay();
         }
+        renderHistory();
     </script>
 </body>
 </html>
