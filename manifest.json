@@ -1,16 +1,17 @@
 {
-  "name": "轻断食",
-  "short_name": "轻断食",
-  "start_url": ".",
+  "name": "断食计时器",
+  "short_name": "断食计时",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#000000",
   "theme_color": "#000000",
-  "description": "简单好用的断食追踪工具",
+  "description": "iOS 26 风格断食计时工具",
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/3241/3241473.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

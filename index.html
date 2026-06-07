@@ -2,103 +2,212 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="轻断食">
+    <meta name="apple-mobile-web-app-title" content="断食计时器">
+    <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="https://img.icons8.com/plasticine/512/apple-health.png">
     <link rel="manifest" href="manifest.json">
-    <title>断食追踪器</title>
+    <title>断食计时器</title>
     <style>
         :root {
-            --primary: #6366f1;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
+            --ios-bg: #000000;
+            --glass: rgba(28, 28, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #5e5ce6;
+            --text-main: #ffffff;
+            --text-secondary: #8e8e93;
+            --danger: #ff453a;
+            --success: #32d74b;
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            background-color: var(--bg);
-            color: var(--text);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
+
+        * {
+            box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
-        .container {
-            background: var(--card);
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+            background-color: var(--ios-bg);
+            background-image: radial-gradient(circle at 50% -20%, #1c1c1e 0%, #000000 100%);
+            color: var(--text-main);
+            margin: 0;
+            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            width: 100%;
+            padding: 40px 0 20px;
+            text-align: left;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .main-widget {
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 38px;
             width: 100%;
             max-width: 400px;
-            text-align: center;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: scaleIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        h1 { margin-bottom: 1.5rem; font-weight: 700; }
-        .timer {
-            font-size: 3rem;
-            font-weight: 800;
-            margin: 1.5rem 0;
-            font-variant-numeric: tabular-nums;
-        }
-        .status {
+
+        .status-pill {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 600;
-            color: #64748b;
+            color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
         }
-        button {
-            background-color: var(--primary);
+
+        .status-pill.active {
+            color: var(--accent);
+            background: rgba(94, 92, 230, 0.15);
+        }
+
+        .timer {
+            font-size: 64px;
+            font-weight: 200;
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 40px;
+            letter-spacing: -2px;
+        }
+
+        .action-btn {
+            background: var(--accent);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            font-size: 16px;
             font-weight: 600;
-            border-radius: 0.5rem;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
+            display: flex;
+            justify(center): center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(94, 92, 230, 0.3);
+        }
+
+        .action-btn:active {
+            transform: scale(0.92);
+        }
+
+        .action-btn.stop {
+            background: var(--danger);
+            box-shadow: 0 0 20px rgba(255, 69, 58, 0.3);
+        }
+
+        .history-section {
             width: 100%;
+            max-width: 400px;
+            margin-top: 40px;
+            animation: fadeInUp 0.8s ease-out;
         }
-        button:hover { opacity: 0.9; }
-        button.stop { background-color: #ef4444; }
-        .history {
-            margin-top: 2rem;
-            text-align: left;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 1rem;
+
+        .history-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-left: 10px;
         }
-        .history h3 { font-size: 0.875rem; color: #64748b; margin-bottom: 0.5rem; }
+
+        .history-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 8px 16px;
+        }
+
         .history-item {
             display: flex;
             justify-content: space-between;
-            font-size: 0.875rem;
-            padding: 0.25rem 0;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-date {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .history-duration {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>断食追踪器</h1>
-        <div id="status" class="status">未在断食</div>
-        <div id="timer" class="timer">00:00:00</div>
-        <button id="toggleBtn">开始断食</button>
+    <div class="header">
+        <h1>断食计时器</h1>
+    </div>
 
-        <div class="history">
-            <h3>最近记录</h3>
-            <div id="historyList"></div>
+    <div class="main-widget">
+        <div id="status" class="status-pill">Standby</div>
+        <div id="timer" class="timer">00:00:00</div>
+        <button id="toggleBtn" class="action-btn">Start</button>
+    </div>
+
+    <div class="history-section">
+        <div class="history-header">最近记录</div>
+        <div class="history-card" id="historyList">
+            <!-- Items injected by JS -->
         </div>
     </div>
 
     <script>
-        // Service Worker registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('SW registered'))
-                    .catch(err => console.log('SW failed', err));
+                navigator.serviceWorker.register('/sw.js');
             });
         }
 
@@ -113,9 +222,10 @@
         function updateDisplay() {
             if (!startTime) {
                 timerDisplay.textContent = "00:00:00";
-                statusDisplay.textContent = "未在断食";
-                toggleBtn.textContent = "开始断食";
-                toggleBtn.className = "";
+                statusDisplay.textContent = "Standby";
+                statusDisplay.classList.remove('active');
+                toggleBtn.textContent = "Start";
+                toggleBtn.classList.remove('stop');
                 clearInterval(interval);
                 return;
             }
@@ -129,16 +239,21 @@
 
             timerDisplay.textContent = 
                 `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            statusDisplay.textContent = "正在断食中";
-            toggleBtn.textContent = "结束断食";
-            toggleBtn.className = "stop";
+            statusDisplay.textContent = "Fasting";
+            statusDisplay.classList.add('active');
+            toggleBtn.textContent = "Stop";
+            toggleBtn.classList.add('stop');
         }
 
         function renderHistory() {
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="history-item"><span class="history-date" style="color: #8e8e93">暂无记录</span></div>';
+                return;
+            }
             historyList.innerHTML = history.slice(-5).reverse().map(f => `
                 <div class="history-item">
-                    <span>${new Date(f.end).toLocaleDateString('zh-CN')}</span>
-                    <span>${f.duration}</span>
+                    <span class="history-date">${new Date(f.end).toLocaleDateString('zh-CN', {month: 'short', day: 'numeric'})}</span>
+                    <span class="history-duration">${f.duration}</span>
                 </div>
             `).join('');
         }
