@@ -1,36 +1,25 @@
 {
   "name": "断食计时器",
   "short_name": "断食计时",
-  "start_url": "/?source=pwa&v=11",
+  "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "minimal-ui"],
   "background_color": "#F2F2F7",
   "theme_color": "#F2F2F7",
   "description": "iOS 26 风格断食计时工具",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3241/3241473.png",
+      "src": "https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/1a5410c4-c0ca-4604-8b4c-02d08ad2e496?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T191550Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=17e7ed23745150de7c54106ad88cc9e50c6fcc34059ae50d44bbde9deeec3530af157f36b41342a72ea2a2026330bad06d82c83a81c56a767c6c3176fbd4a536591e28bbee60235be7d2d82a283301659b774a69eb0e93679ab028e414580c44e74591d321fef07ebec0734a019b3ebcad5fcfb2b0ad31c20f58646268eb3de2357acf07aa753752759c32f59a87a1a56d4e244ebf807ed1b50f071aceef476961af6210e3fa3388dea5082a751722357ad37e74d53c78a439d21551b4d618b2e70c74f7f8683af30d3b14ebe4223d5de40f6fc909fcecf59d6a41556ec4bd2a860847daf344331de07ce5cbda0904745316fbe1522413a68eadc102f93f87f7",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3241/3241473.png",
+      "src": "https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/1a5410c4-c0ca-4604-8b4c-02d08ad2e496?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T191550Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=17e7ed23745150de7c54106ad88cc9e50c6fcc34059ae50d44bbde9deeec3530af157f36b41342a72ea2a2026330bad06d82c83a81c56a767c6c3176fbd4a536591e28bbee60235be7d2d82a283301659b774a69eb0e93679ab028e414580c44e74591d321fef07ebec0734a019b3ebcad5fcfb2b0ad31c20f58646268eb3de2357acf07aa753752759c32f59a87a1a56d4e244ebf807ed1b50f071aceef476961af6210e3fa3388dea5082a751722357ad37e74d53c78a439d21551b4d618b2e70c74f7f8683af30d3b14ebe4223d5de40f6fc909fcecf59d6a41556ec4bd2a860847daf344331de07ce5cbda0904745316fbe1522413a68eadc102f93f87f7",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/3241/3241473.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/3241/3241473.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ]
 }
