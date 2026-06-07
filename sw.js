@@ -1,15 +1,11 @@
-const CACHE_NAME = 'fasting-timer-v2';
+const CACHE_NAME = 'fasting-timer-v3';
 
 self.addEventListener('install', (event) => {
-  // Force the waiting service worker to become the active service worker.
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  // Immediately take control of all pages in scope.
   event.waitUntil(clients.claim());
-  
-  // Clear old caches
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -24,19 +20,20 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Network-first strategy for index.html to ensure fresh content
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match(event.request);
-      })
-    );
-    return;
+  // Add a cache-busting timestamp to the request if it's the main page
+  let request = event.request;
+  if (request.mode === 'navigate') {
+    const url = new URL(request.url);
+    url.searchParams.set('t', Date.now());
+    request = new Request(url, {
+      mode: 'navigate',
+      cache: 'no-store'
+    });
   }
 
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+    fetch(request).catch(() => {
+      return caches.match(event.request);
     })
   );
 });
