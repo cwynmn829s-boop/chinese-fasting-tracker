@@ -10,25 +10,25 @@
   "description": "iOS 26 风格断食计时工具",
   "icons": [
     {
-      "src": "apple-touch-icon.png",
+      "src": "https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/17735ca8-f0f4-4ba3-9d2f-f68b3dddf8c6?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T195114Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=7081c1fcced7ac894ea33ae90b5ffbda739caac712ca272ba778b77ce338d1bd8e3219bbcba951b3d417e3255e055c8546cdff737a03516f0c4f06e59bb1bbe593e5c564661ef54a4138549a690802fd79ad92459e660ef8b94c8d31ef77e109d7bdb8ff052e7539463b8dd95d68edb4246569f3670e0c7184628c6c6389226cdcf137438fc3b6bf2bceeba744f7ba0e96514f76456fbded8f88e5a4d07f9cb14ea6aca0d68dd9579b912c4d454c610572a1661ce18cf038b7496b6e10ac725905ea6f526cd861f24aa8e51a9becc3ea4b5145c79d5bdc21d93ddad435bbb9f5bffee4ab952c8a2aa9dd2dc9dc6ffc93b00a51f5a74dd21f810c1d0f801b8982",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "apple-touch-icon.png",
+      "src": "https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/17735ca8-f0f4-4ba3-9d2f-f68b3dddf8c6?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T195114Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=7081c1fcced7ac894ea33ae90b5ffbda739caac712ca272ba778b77ce338d1bd8e3219bbcba951b3d417e3255e055c8546cdff737a03516f0c4f06e59bb1bbe593e5c564661ef54a4138549a690802fd79ad92459e660ef8b94c8d31ef77e109d7bdb8ff052e7539463b8dd95d68edb4246569f3670e0c7184628c6c6389226cdcf137438fc3b6bf2bceeba744f7ba0e96514f76456fbded8f88e5a4d07f9cb14ea6aca0d68dd9579b912c4d454c610572a1661ce18cf038b7496b6e10ac725905ea6f526cd861f24aa8e51a9becc3ea4b5145c79d5bdc21d93ddad435bbb9f5bffee4ab952c8a2aa9dd2dc9dc6ffc93b00a51f5a74dd21f810c1d0f801b8982",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "apple-touch-icon.png",
+      "src": "https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/17735ca8-f0f4-4ba3-9d2f-f68b3dddf8c6?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T195114Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=7081c1fcced7ac894ea33ae90b5ffbda739caac712ca272ba778b77ce338d1bd8e3219bbcba951b3d417e3255e055c8546cdff737a03516f0c4f06e59bb1bbe593e5c564661ef54a4138549a690802fd79ad92459e660ef8b94c8d31ef77e109d7bdb8ff052e7539463b8dd95d68edb4246569f3670e0c7184628c6c6389226cdcf137438fc3b6bf2bceeba744f7ba0e96514f76456fbded8f88e5a4d07f9cb14ea6aca0d68dd9579b912c4d454c610572a1661ce18cf038b7496b6e10ac725905ea6f526cd861f24aa8e51a9becc3ea4b5145c79d5bdc21d93ddad435bbb9f5bffee4ab952c8a2aa9dd2dc9dc6ffc93b00a51f5a74dd21f810c1d0f801b8982",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "apple-touch-icon.png",
+      "src": "https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/17735ca8-f0f4-4ba3-9d2f-f68b3dddf8c6?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T195114Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=7081c1fcced7ac894ea33ae90b5ffbda739caac712ca272ba778b77ce338d1bd8e3219bbcba951b3d417e3255e055c8546cdff737a03516f0c4f06e59bb1bbe593e5c564661ef54a4138549a690802fd79ad92459e660ef8b94c8d31ef77e109d7bdb8ff052e7539463b8dd95d68edb4246569f3670e0c7184628c6c6389226cdcf137438fc3b6bf2bceeba744f7ba0e96514f76456fbded8f88e5a4d07f9cb14ea6aca0d68dd9579b912c4d454c610572a1661ce18cf038b7496b6e10ac725905ea6f526cd861f24aa8e51a9becc3ea4b5145c79d5bdc21d93ddad435bbb9f5bffee4ab952c8a2aa9dd2dc9dc6ffc93b00a51f5a74dd21f810c1d0f801b8982",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
