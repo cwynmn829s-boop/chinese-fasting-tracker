@@ -1,11 +1,20 @@
-const CACHE_NAME = 'fasting-timer-v3';
+const CACHE_NAME = 'fasting-timer-v4';
+const ASSETS_TO_CACHE = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  'https://cdn.jsdelivr.net/npm/chart.js'
+];
 
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE);
+    }).then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -15,25 +24,38 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', (event) => {
-  // Add a cache-busting timestamp to the request if it's the main page
-  let request = event.request;
-  if (request.mode === 'navigate') {
-    const url = new URL(request.url);
-    url.searchParams.set('t', Date.now());
-    request = new Request(url, {
-      mode: 'navigate',
-      cache: 'no-store'
-    });
-  }
+  // Only handle GET requests
+  if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    fetch(request).catch(() => {
-      return caches.match(event.request);
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(event.request).then((response) => {
+        // Don't cache if not a valid response
+        if (!response || response.status !== 200 || response.type !== 'basic' && !event.request.url.includes('cdn.jsdelivr.net')) {
+          return response;
+        }
+
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseToCache);
+        });
+
+        return response;
+      }).catch(() => {
+        // Fallback for navigation requests
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html') || caches.match('/');
+        }
+      });
     })
   );
 });
