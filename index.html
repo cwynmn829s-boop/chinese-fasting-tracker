@@ -22,13 +22,28 @@
             --ios-accent: #34C759;
             --ios-danger: #FF3B30;
             --glass: rgba(255, 255, 255, 0.7);
+            --ios-curve: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 100% 隐藏所有滚动条，锁定根视图 */
+        /* 强制隐藏所有滚动条 */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+        }
+
+        *::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+
         html, body {
             margin: 0;
             padding: 0;
-            width: 100% !important;
+            width: 100%;
             height: 100% !important;
             overflow: hidden !important;
             position: fixed !important;
@@ -37,36 +52,25 @@
             background-color: var(--ios-bg);
         }
 
-        /* 主包装容器，处理内部滚动 */
         #app-wrapper {
-            width: 100%;
             height: 100%;
-            overflow-y: scroll !important;
+            width: 100%;
+            overflow-y: scroll;
             -webkit-overflow-scrolling: touch;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
-            scrollbar-width: none !important;
-            -ms-overflow-style: none !important;
-        }
-
-        #app-wrapper::-webkit-scrollbar, 
-        *::-webkit-scrollbar {
-            display: none !important;
-            width: 0 !important;
-            height: 0 !important;
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
             color: var(--ios-label);
+        }
+
+        /* 动画基础 */
+        .spring-transition {
+            transition: all 0.5s var(--ios-curve);
         }
 
         .header { width: 100%; padding: 34px 4px 12px; }
@@ -78,7 +82,7 @@
             backdrop-filter: blur(30px) saturate(180%);
             -webkit-backdrop-filter: blur(30px) saturate(180%);
             border: 0.5px solid rgba(0, 0, 0, 0.05);
-            border-radius: 30px;
+            border-radius: 38px;
             width: 100%;
             max-width: 400px;
             padding: 24px;
@@ -87,47 +91,79 @@
             align-items: center;
             margin-top: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            flex-shrink: 0;
+            transition: transform 0.6s var(--ios-curve), box-shadow 0.6s var(--ios-curve);
+        }
+        .main-widget.active {
+            box-shadow: 0 20px 40px rgba(52, 199, 89, 0.12);
+            transform: scale(1.02);
         }
 
         /* 断食方案选择 */
         .protocol-selector {
             display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 24px;
             width: 100%;
             justify-content: center;
+            position: relative;
         }
         .protocol-chip {
-            padding: 8px 16px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 12px;
-            font-size: 14px;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.04);
+            border-radius: 14px;
+            font-size: 15px;
             color: var(--ios-secondary-label);
-            transition: all 0.3s;
+            transition: all 0.4s var(--ios-curve);
+            cursor: pointer;
+        }
+        .protocol-chip:active {
+            transform: scale(0.92);
+            background: rgba(0,0,0,0.08);
         }
         .protocol-chip.active {
             background: var(--ios-accent);
             color: white;
             font-weight: 600;
+            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.25);
+            transform: translateY(-2px);
         }
 
-        .timer { font-size: 56px; font-weight: 200; font-variant-numeric: tabular-nums; margin-bottom: 24px; letter-spacing: -1.5px; }
+        .timer-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px 0 30px;
+        }
+        .timer { 
+            font-size: 64px; 
+            font-weight: 200; 
+            font-variant-numeric: tabular-nums; 
+            letter-spacing: -2px;
+            transition: transform 0.6s var(--ios-curve), color 0.4s ease;
+        }
+        .timer.running {
+            color: var(--ios-accent);
+            transform: scale(1.05);
+        }
 
         .action-btn {
             background: var(--ios-accent);
             color: white;
             border: none;
-            width: 72px;
-            height: 72px;
-            border-radius: 36px;
-            font-size: 16px;
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            font-size: 17px;
             font-weight: 600;
-            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2);
-            transition: transform 0.1s;
+            box-shadow: 0 6px 16px rgba(52, 199, 89, 0.3);
+            transition: all 0.4s var(--ios-curve);
         }
-        .action-btn:active { transform: scale(0.95); }
-        .action-btn.stop { background: var(--ios-danger); box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2); }
+        .action-btn:active { transform: scale(0.88); box-shadow: 0 2px 8px rgba(52, 199, 89, 0.2); }
+        .action-btn.stop { 
+            background: var(--ios-danger); 
+            box-shadow: 0 6px 16px rgba(255, 59, 48, 0.3); 
+        }
 
         /* 数据网格 */
         .stats-grid {
@@ -135,57 +171,78 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
             width: 100%;
-            margin-top: 24px;
+            margin-top: 28px;
         }
         .stat-card {
             background: white;
-            padding: 12px;
-            border-radius: 16px;
+            padding: 14px;
+            border-radius: 20px;
             text-align: center;
+            transition: transform 0.4s var(--ios-curve);
         }
-        .stat-val { font-size: 18px; font-weight: 700; color: var(--ios-accent); display: block; }
-        .stat-lab { font-size: 10px; color: var(--ios-secondary-label); margin-top: 4px; }
+        .stat-card:active { transform: scale(0.94); }
+        .stat-val { font-size: 20px; font-weight: 700; color: var(--ios-accent); display: block; transition: all 0.3s ease; }
+        .stat-lab { font-size: 11px; color: var(--ios-secondary-label); margin-top: 4px; font-weight: 500; }
 
         /* 通用区块样式 */
-        .tool-section { width: 100%; max-width: 400px; margin-top: 24px; flex-shrink: 0; }
-        .section-title { font-size: 13px; color: var(--ios-secondary-label); text-transform: uppercase; margin-bottom: 8px; padding-left: 16px; }
+        .tool-section { width: 100%; max-width: 400px; margin-top: 28px; }
+        .section-title { font-size: 13px; color: var(--ios-secondary-label); text-transform: uppercase; margin-bottom: 10px; padding-left: 16px; font-weight: 600; letter-spacing: 0.5px; }
         
         .tool-card {
             background: var(--ios-group-bg);
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: 22px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 14px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            transition: transform 0.4s var(--ios-curve);
         }
+        .tool-card:active { transform: scale(0.98); }
 
         /* 饮水追踪 */
         .water-header { display: flex; justify-content: space-between; align-items: center; }
-        .water-controls { display: flex; align-items: center; justify-content: center; gap: 16px; width: 100%; padding: 8px 0; }
-        .water-btn { width: 44px; height: 44px; border-radius: 22px; border: none; background: #E5F6FF; color: #007AFF; font-size: 24px; font-weight: 600; }
-        .water-display { font-size: 16px; font-weight: 600; min-width: 120px; text-align: center; color: #007AFF; }
+        .water-controls { display: flex; align-items: center; justify-content: center; gap: 24px; width: 100%; padding: 10px 0; }
+        .water-btn { 
+            width: 48px; height: 48px; border-radius: 24px; border: none; background: #E5F6FF; color: #007AFF; 
+            font-size: 26px; font-weight: 600; transition: all 0.3s var(--ios-curve);
+        }
+        .water-btn:active { transform: scale(0.85); background: #CCEFFF; }
+        .water-display { font-size: 18px; font-weight: 700; min-width: 140px; text-align: center; color: #007AFF; transition: transform 0.2s var(--ios-curve); }
+        .water-pop { transform: scale(1.15); }
         .cup-selector { 
-            border: none; background: #F2F2F7; padding: 6px 10px; border-radius: 8px; font-size: 14px; outline: none; 
-            color: var(--ios-label);
+            border: none; background: #F2F2F7; padding: 8px 12px; border-radius: 10px; font-size: 14px; outline: none; 
+            color: var(--ios-label); font-weight: 500;
         }
 
         /* 体重记录 */
         .weight-input-container { display: flex; justify-content: space-between; align-items: center; }
-        .weight-input { border: none; background: #F2F2F7; padding: 8px 12px; border-radius: 8px; width: 100px; text-align: center; font-size: 16px; outline: none; }
+        .weight-input { border: none; background: #F2F2F7; padding: 10px 14px; border-radius: 12px; width: 100px; text-align: center; font-size: 17px; outline: none; transition: background 0.3s; font-weight: 600; }
+        .weight-input:focus { background: #E5E5EA; }
         .chart-container { 
-            background: white; border-radius: 12px; padding: 12px; margin-top: 12px; height: 200px; position: relative;
-            overflow: hidden;
+            background: white; border-radius: 18px; padding: 12px; margin-top: 12px; height: 220px; position: relative;
+            overflow: hidden; transition: height 0.6s var(--ios-curve);
         }
-        .chart-controls { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
-        .zoom-btn { background: #F2F2F7; border: none; border-radius: 6px; padding: 4px 8px; font-size: 12px; color: var(--ios-secondary-label); }
+        .chart-controls { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
+        .zoom-btn { background: #F2F2F7; border: none; border-radius: 8px; padding: 6px 12px; font-size: 13px; color: var(--ios-secondary-label); font-weight: 600; transition: all 0.2s; }
+        .zoom-btn:active { background: #E5E5EA; transform: scale(0.92); }
 
         /* 历史记录 */
-        .history-list { background: var(--ios-group-bg); border-radius: 12px; overflow: hidden; margin-bottom: 32px; }
-        .history-row-wrapper { position: relative; overflow: hidden; background-color: var(--ios-danger); }
-        .history-item { background: var(--ios-group-bg); display: flex; justify-content: space-between; padding: 14px 16px; position: relative; z-index: 2; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); border-bottom: 0.5px solid var(--ios-separator); }
+        .history-list { background: var(--ios-group-bg); border-radius: 22px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .history-row-wrapper { 
+            position: relative; overflow: hidden; background-color: var(--ios-danger); 
+            transition: max-height 0.5s var(--ios-curve), opacity 0.4s ease;
+            max-height: 100px;
+        }
+        .history-row-wrapper.deleting { max-height: 0; opacity: 0; pointer-events: none; }
+        .history-item { 
+            background: var(--ios-group-bg); display: flex; justify-content: space-between; padding: 16px 20px; 
+            position: relative; z-index: 2; transition: transform 0.5s var(--ios-curve); 
+            border-bottom: 0.5px solid rgba(0,0,0,0.05);
+        }
         .history-item:last-child { border-bottom: none; }
-        .delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: var(--ios-danger); color: white; display: flex; justify-content: center; align-items: center; z-index: 1; font-weight: 600; }
+        .delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: var(--ios-danger); color: white; display: flex; justify-content: center; align-items: center; z-index: 1; font-weight: 700; font-size: 15px; }
         .swiped .history-item { transform: translateX(-80px); }
     </style>
 </head>
@@ -193,13 +250,15 @@
     <div id="app-wrapper">
         <div class="header"><h1>断食计时器</h1></div>
 
-        <div class="main-widget">
+        <div class="main-widget" id="mainWidget">
             <div class="protocol-selector" id="protocolList">
                 <div class="protocol-chip" data-hours="20">20:4</div>
                 <div class="protocol-chip" data-hours="16">16:8</div>
                 <div class="protocol-chip" data-hours="18">18:6</div>
             </div>
-            <div id="timer" class="timer">00:00:00</div>
+            <div class="timer-container">
+                <div id="timer" class="timer">00:00:00</div>
+            </div>
             <button id="toggleBtn" class="action-btn">开始</button>
 
             <div class="stats-grid">
@@ -255,7 +314,6 @@
     </div>
 
     <script>
-        // 核心数据初始化
         let startTime = localStorage.getItem('fastStartTime');
         let history = JSON.parse(localStorage.getItem('fastHistory') || '[]');
         let waterTotal = parseInt(localStorage.getItem('waterTotal') || '0');
@@ -266,6 +324,7 @@
 
         const timerDisplay = document.getElementById('timer');
         const toggleBtn = document.getElementById('toggleBtn');
+        const mainWidget = document.getElementById('mainWidget');
         const waterDisplay = document.getElementById('waterDisplay');
         const cupSizeSelect = document.getElementById('cupSizeSelect');
         const weightInput = document.getElementById('weightInput');
@@ -273,10 +332,11 @@
 
         function haptic() { if ("vibrate" in navigator) navigator.vibrate(10); }
 
-        // 计时逻辑
         function updateDisplay() {
             if (!startTime) {
                 timerDisplay.textContent = "00:00:00";
+                timerDisplay.classList.remove('running');
+                mainWidget.classList.remove('active');
                 toggleBtn.textContent = "开始";
                 toggleBtn.classList.remove('stop');
                 clearInterval(interval);
@@ -288,11 +348,12 @@
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
             timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            timerDisplay.classList.add('running');
+            mainWidget.classList.add('active');
             toggleBtn.textContent = "结束";
             toggleBtn.classList.add('stop');
         }
 
-        // 数据统计
         function renderStats() {
             const totalHours = history.reduce((acc, item) => acc + parseFloat(item.duration || 0), 0).toFixed(1);
             document.getElementById('statTotal').textContent = totalHours;
@@ -301,7 +362,6 @@
             document.getElementById('statRate').textContent = rate + "%";
         }
 
-        // 饮水逻辑
         cupSizeSelect.value = cupSize;
         cupSizeSelect.onchange = (e) => {
             cupSize = parseInt(e.target.value);
@@ -309,9 +369,15 @@
             updateWaterUI();
         };
 
-        document.getElementById('waterAdd').onclick = () => { haptic(); waterTotal += cupSize; updateWater(); };
-        document.getElementById('waterSub').onclick = () => { haptic(); if(waterTotal >= cupSize) waterTotal -= cupSize; updateWater(); };
+        document.getElementById('waterAdd').onclick = () => { animateWater(); waterTotal += cupSize; updateWater(); };
+        document.getElementById('waterSub').onclick = () => { animateWater(); if(waterTotal >= cupSize) waterTotal -= cupSize; updateWater(); };
         
+        function animateWater() {
+            haptic();
+            waterDisplay.classList.add('water-pop');
+            setTimeout(() => waterDisplay.classList.remove('water-pop'), 200);
+        }
+
         function updateWater() { 
             localStorage.setItem('waterTotal', waterTotal); 
             updateWaterUI(); 
@@ -322,7 +388,6 @@
             waterDisplay.textContent = `${waterTotal}ml / ${cups}杯`;
         }
 
-        // 体重图表逻辑
         let weightChart;
         function initChart() {
             const ctx = document.getElementById('weightChart').getContext('2d');
@@ -336,21 +401,28 @@
                         label: '体重',
                         data: data.map(d => d.val),
                         borderColor: '#34C759',
-                        backgroundColor: 'rgba(52, 199, 89, 0.1)',
+                        backgroundColor: 'rgba(52, 199, 89, 0.12)',
                         borderWidth: 3,
-                        tension: 0.4,
+                        tension: 0.45,
                         fill: true,
                         pointBackgroundColor: '#34C759',
-                        pointRadius: 4
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    },
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { display: true, grid: { display: false } },
-                        x: { display: true, grid: { display: false } }
+                        y: { display: true, grid: { color: 'rgba(0,0,0,0.03)' }, ticks: { font: { weight: '600' } } },
+                        x: { display: true, grid: { display: false }, ticks: { font: { weight: '500' } } }
                     }
                 }
             });
@@ -365,6 +437,7 @@
         }
 
         function zoomChart(factor) {
+            haptic();
             const container = document.querySelector('.chart-container');
             const currentHeight = container.clientHeight;
             container.style.height = (currentHeight / factor) + 'px';
@@ -381,16 +454,16 @@
             updateChart();
             haptic();
             e.target.value = '';
+            e.target.blur();
         };
 
-        // 历史记录
         function renderHistory() {
             historyList.innerHTML = history.length ? '' : '<div class="history-item" style="color:#8e8e93; justify-content:center">暂无记录</div>';
             history.slice().reverse().forEach((item, revIdx) => {
                 const idx = history.length - 1 - revIdx;
                 const wrapper = document.createElement('div');
                 wrapper.className = 'history-row-wrapper';
-                wrapper.innerHTML = `<div class="delete-btn" onclick="deleteItem(${idx})">删除</div>
+                wrapper.innerHTML = `<div class="delete-btn" onclick="deleteItem(${idx}, this)">删除</div>
                     <div class="history-item"><span>${new Date(item.end).toLocaleDateString('zh-CN')}</span><span>${item.duration}小时</span></div>`;
                 
                 const itemEl = wrapper.querySelector('.history-item');
@@ -404,7 +477,17 @@
             });
         }
 
-        function deleteItem(idx) { haptic(); history.splice(idx, 1); localStorage.setItem('fastHistory', JSON.stringify(history)); renderHistory(); renderStats(); }
+        function deleteItem(idx, btn) { 
+            haptic(); 
+            const wrapper = btn.closest('.history-row-wrapper');
+            wrapper.classList.add('deleting');
+            setTimeout(() => {
+                history.splice(idx, 1); 
+                localStorage.setItem('fastHistory', JSON.stringify(history)); 
+                renderHistory(); 
+                renderStats(); 
+            }, 400);
+        }
 
         toggleBtn.onclick = () => {
             haptic();
@@ -423,7 +506,6 @@
             updateDisplay(); renderHistory(); renderStats();
         };
 
-        // 方案切换
         document.querySelectorAll('.protocol-chip').forEach(chip => {
             if(parseInt(chip.dataset.hours) === protocol) chip.classList.add('active');
             chip.onclick = () => {
@@ -436,7 +518,6 @@
             };
         });
 
-        // 初始化
         if (startTime) { interval = setInterval(updateDisplay, 1000); updateDisplay(); }
         updateWaterUI(); renderHistory(); renderStats(); initChart();
     </script>
