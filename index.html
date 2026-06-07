@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-title" content="断食计时器">
     <meta name="theme-color" content="#F2F2F7">
     <link rel="apple-touch-icon" href="https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/880c3e60-5f10-4176-a153-9b8f5670e5f0?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T200545Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=9103f050ed20b84f1a6392fa84e6b33270439db39b5fe590aef0fa19e474e64397edd3ee8465a39a4e8e12f498a3a95a230a630379860116fd6aa6cc88a87513c56598ad7a22bf30d31c3ff0bdf954214761308b1fa11d993dfdb5f17fd3217a6b74ef85abd34a1afc37b1da4b733f05fc854c3480a88b3179dbef8bc7ad5f3344fad4c2103e55ddf7ea37770965e96effa754c13816f261d90ea4228f25b441ece1e35de7ee0d2bc693cb0032269374b884432b403c412405a2ff0026cdc30c314a07776c49de64cce8d620a01d727808541051b4087af87dbb0dbdc6e5891a9f52c6acc84eb9cad36ad38f5ed3218bcde2d8fa52f03cd3f7d07bd8da3659ee">
-    <link rel="manifest" href="/manifest.json?v=300">
+    <link rel="manifest" href="/manifest.json?v=301">
     <title>断食计时器</title>
     <style>
         :root {
@@ -262,16 +262,17 @@
     </div>
 
     <script>
-        // Force update logic with higher version
-        const SW_VERSION = 'v300';
+        // Force update logic
+        const SW_VERSION = 'v301';
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js?v=' + SW_VERSION).then(reg => {
-                    console.log('SW Registered');
+                    console.log('SW registered:', reg);
                     reg.onupdatefound = () => {
                         const installingWorker = reg.installing;
                         installingWorker.onstatechange = () => {
                             if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // Clear cache and reload for the newest version
                                 caches.keys().then(names => {
                                     for (let name of names) caches.delete(name);
                                     window.location.reload();
@@ -279,7 +280,9 @@
                             }
                         };
                     };
-                }).catch(err => console.error('SW Registration failed', err));
+                }).catch(err => {
+                    console.error('SW registration failed:', err);
+                });
             });
         }
 
