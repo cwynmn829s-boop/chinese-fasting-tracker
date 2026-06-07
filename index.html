@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="断食计时器">
     <meta name="theme-color" content="#F2F2F7">
-    <link rel="apple-touch-icon" href="https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/8afcf611-ed23-450e-9491-8703dd91ff06?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T174225Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=a82487a8fbd5cbf066aae87e58562d932231ea296716b9186f60bc405f21ff1414b57ec2103c9f6573b55b26363a31f1c5739a73d2f0d0cf71e95da6d1886e24fbbb8eb8d0fdf0567de2db0b689646e9f7a91ee2a065041645ca69b9a0aebf5a49c6a09387cde4911c0b7c5419515efb34d203fe7b9dd978defea1c47a952bbbbcae580e73783a50e8117f79cfbe36474092e2a9e7d92be23bc9deb3517f2fd2b5d0c97e8c724ebc1fb593b93e13034471a1ce601faccd80490a7578edefa039fea9bb02320cec8f995148aa7a47a8656a8fb8b4cc0804a324607d6963fc58daadbe53c4775c7cfb68f2733c4a677009ce222eff904e49680b37a2334de17860">
+    <link rel="apple-touch-icon" href="https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/efbf9c40-3624-465e-ba44-1c6cfdca17f4?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T175139Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=745b74e93061a35bd8a43890abdc7bb8188650a68a5baf0faae5d490c7b56094676e4feb8c502f8b267b74bb03e096d510da16c5993288bbeb268c38e6b3f391c714bd2dc3ec4fb3db721e804e653ea2ad3cd0e1858b9c15b8e96955bc641d195ae5baedf28af5a9d4ac6475a21dba4b34299cd3077c8382de0228c429f925341169cfb3328b34201a28451829945e99f7636622ab3e3ce58ccb6bdc3cfb05e6350a3c7e91ea556bbe7abcb5c2f69177d0e8c61e19f15ad80b82d0dea228d5a1f68b8c18ccbf95d684b362a95b57b42861c3dae9d6ace15a8b1dbbad15ea320aa5e674c43202998237e1d7817b9a6fe5117cd18708ea04e0a9e236e6e484a7a8">
     <link rel="manifest" href="manifest.json">
     <title>断食计时器</title>
     <style>
@@ -126,10 +126,7 @@
             width: 100%;
             max-width: 400px;
             margin-top: 32px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 0;
+            overflow: hidden;
         }
 
         .history-header {
@@ -144,22 +141,22 @@
         .history-list {
             background: var(--ios-group-bg);
             border-radius: 12px;
-            overflow-y: scroll;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
+            max-height: 300px;
             scrollbar-width: none; /* Firefox */
             -ms-overflow-style: none;  /* IE and Edge */
         }
 
         .history-list::-webkit-scrollbar {
-            display: none; /* Chrome, Safari and Opera */
+            display: none; /* Chrome, Safari, Opera */
         }
 
         .history-row-wrapper {
             position: relative;
             overflow: hidden;
             background-color: var(--ios-danger);
-            flex-shrink: 0;
         }
 
         .history-item {
@@ -248,7 +245,7 @@
         // PWA update logic
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js?v=5').then(reg => {
+                navigator.serviceWorker.register('/sw.js?v=4').then(reg => {
                     reg.onupdatefound = () => {
                         const installingWorker = reg.installing;
                         installingWorker.onstatechange = () => {
