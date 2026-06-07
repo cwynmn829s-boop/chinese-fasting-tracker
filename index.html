@@ -7,8 +7,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="断食计时器">
     <meta name="theme-color" content="#F2F2F7">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3241/3241473.png">
+    <link rel="manifest" href="/manifest.json?v=11">
     <title>断食计时器</title>
     <style>
         :root {
@@ -20,7 +20,6 @@
             --ios-accent: #34C759;
             --ios-danger: #FF3B30;
             --glass: rgba(255, 255, 255, 0.7);
-            --desktop-bg: #0A0F0D;
         }
 
         * {
@@ -38,73 +37,75 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
-            background-color: var(--desktop-bg);
+            background-color: var(--ios-bg);
+            color: var(--ios-label);
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             overflow-x: hidden;
         }
 
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
-            background-color: var(--ios-bg);
-            color: var(--ios-label);
+        /* Responsive Layout Engine */
+        .page-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            box-shadow: 0 0 100px rgba(0,0,0,0.5);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            min-height: 100vh;
         }
 
-        @media (max-width: 480px) {
-            .app-container {
-                box-shadow: none;
-                min-height: 100vh;
-            }
-        }
-
+        /* Header spans full width */
         .header {
-            width: 100%;
-            padding: 34px 4px 12px;
-            text-align: left;
+            grid-column: 1 / -1;
+            padding: 40px 10px 10px;
         }
 
         h1 {
-            font-size: 34px;
-            font-weight: 700;
+            font-size: 38px;
+            font-weight: 800;
             margin: 0;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
         }
 
+        /* Grid Layout for Tablet Landscape */
+        @media (min-width: 900px) {
+            .page-wrapper {
+                grid-template-columns: 1fr 1fr;
+                align-items: start;
+                padding: 60px 40px;
+                gap: 60px;
+            }
+            .header {
+                padding: 0 10px 20px;
+            }
+            h1 { font-size: 48px; }
+        }
+
+        /* Main Widget - Premium Glassmorphism */
         .main-widget {
             background: var(--glass);
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
-            border: 0.5px solid rgba(0, 0, 0, 0.05);
-            border-radius: 30px;
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 0.5px solid rgba(255, 255, 255, 0.4);
+            border-radius: 40px;
             width: 100%;
-            padding: 30px 20px;
+            padding: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            animation: scaleIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+            animation: slideIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .status-pill {
-            padding: 4px 14px;
-            border-radius: 10px;
-            font-size: 14px;
+            padding: 6px 18px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--ios-secondary-label);
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             transition: all 0.3s ease;
         }
 
@@ -114,59 +115,62 @@
         }
 
         .timer {
-            font-size: 64px;
+            font-size: clamp(64px, 12vw, 96px);
             font-weight: 200;
             font-variant-numeric: tabular-nums;
-            margin-bottom: 30px;
-            letter-spacing: -1.5px;
+            margin-bottom: 40px;
+            letter-spacing: -2px;
         }
 
         .action-btn {
             background: var(--ios-accent);
             color: white;
             border: none;
-            width: 72px;
-            height: 72px;
-            border-radius: 36px;
-            font-size: 16px;
+            width: 84px;
+            height: 84px;
+            border-radius: 42px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, background-color 0.3s;
+            transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2);
+            box-shadow: 0 10px 25px rgba(52, 199, 89, 0.3);
         }
 
         .action-btn:active {
-            transform: scale(0.92);
+            transform: scale(0.9);
         }
 
         .action-btn.stop {
             background: var(--ios-danger);
-            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2);
+            box-shadow: 0 10px 25px rgba(255, 59, 48, 0.3);
         }
 
+        /* History Section - Native Grouped Style */
         .history-section {
             width: 100%;
-            margin-top: 32px;
+            animation: slideIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .history-header {
-            font-size: 13px;
-            font-weight: 400;
+            font-size: 14px;
+            font-weight: 600;
             color: var(--ios-secondary-label);
             text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             padding-left: 16px;
+            letter-spacing: 0.5px;
         }
 
         .history-list {
             background: var(--ios-group-bg);
-            border-radius: 12px;
+            border-radius: 20px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
         }
 
         .history-row-wrapper {
@@ -180,17 +184,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 16px;
+            padding: 18px 20px;
             transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
             position: relative;
             z-index: 2;
-            cursor: pointer;
         }
 
         .history-item::after {
             content: "";
             position: absolute;
-            left: 16px;
+            left: 20px;
             right: 0;
             bottom: 0;
             height: 0.5px;
@@ -206,40 +209,40 @@
             right: 0;
             top: 0;
             bottom: 0;
-            width: 80px;
+            width: 90px;
             background-color: var(--ios-danger);
             color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 15px;
-            font-weight: 500;
+            font-size: 17px;
+            font-weight: 600;
             z-index: 1;
         }
 
         .history-date {
-            font-size: 17px;
+            font-size: 19px;
             font-weight: 400;
         }
 
         .history-duration {
-            font-size: 17px;
-            font-weight: 400;
+            font-size: 19px;
+            font-weight: 500;
             color: var(--ios-secondary-label);
         }
 
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .swiped .history-item {
-            transform: translateX(-80px);
+            transform: translateX(-90px);
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="page-wrapper">
         <div class="header">
             <h1>断食计时器</h1>
         </div>
@@ -259,12 +262,23 @@
     </div>
 
     <script>
+        // Force update logic
+        const SW_VERSION = 'v11';
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(reg => {
-                    console.log('SW registered');
-                }).catch(err => {
-                    console.log('SW registration failed: ', err);
+                navigator.serviceWorker.register('/sw.js?v=' + SW_VERSION).then(reg => {
+                    reg.onupdatefound = () => {
+                        const installingWorker = reg.installing;
+                        installingWorker.onstatechange = () => {
+                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // Clear cache and reload for the newest version
+                                caches.keys().then(names => {
+                                    for (let name of names) caches.delete(name);
+                                    window.location.reload();
+                                });
+                            }
+                        };
+                    };
                 });
             });
         }
@@ -279,7 +293,7 @@
 
         function haptic() {
             if ("vibrate" in navigator) {
-                navigator.vibrate(15);
+                navigator.vibrate(20);
             }
         }
 
@@ -328,7 +342,7 @@
                 wrapper.innerHTML = `
                     <div class="delete-btn" onclick="deleteItem(${idx})">删除</div>
                     <div class="history-item" id="item-${idx}">
-                        <span class="history-date">${new Date(item.end).toLocaleDateString('zh-CN', {month: 'short', day: 'numeric'})}</span>
+                        <span class="history-date">${new Date(item.end).toLocaleDateString('zh-CN', {month: 'short', day: 'numeric', weekday: 'short'})}</span>
                         <span class="history-duration">${item.duration}</span>
                     </div>
                 `;
@@ -344,16 +358,16 @@
                 itemEl.addEventListener('touchmove', (e) => {
                     currentX = e.touches[0].clientX;
                     const diff = startX - currentX;
-                    if (diff > 0 && diff < 100) {
+                    if (diff > 0 && diff < 110) {
                         itemEl.style.transform = `translateX(-${diff}px)`;
                     }
                 }, {passive: true});
 
                 itemEl.addEventListener('touchend', (e) => {
                     const diff = startX - currentX;
-                    if (diff > 40) {
+                    if (diff > 45) {
                         wrapper.classList.add('swiped');
-                        itemEl.style.transform = `translateX(-80px)`;
+                        itemEl.style.transform = `translateX(-90px)`;
                     } else {
                         wrapper.classList.remove('swiped');
                         itemEl.style.transform = `translateX(0)`;
