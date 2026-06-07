@@ -1,9 +1,8 @@
-const CACHE_NAME = 'fasting-timer-v8';
+const CACHE_NAME = 'fasting-timer-v7';
 const ASSETS = [
   '/',
   '/index.html',
-  '/manifest.json',
-  '/apple-touch-icon.png'
+  '/manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
@@ -16,18 +15,14 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => Promise.all(
-      keys.map((key) => {
-        if (key !== CACHE_NAME) return caches.delete(key);
-      })
+      keys.map((key) => { if (key !== CACHE_NAME) return caches.delete(key); })
     ))
   );
-  self.clients.claim();
+  clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
