@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="断食计时器">
     <meta name="theme-color" content="#F2F2F7">
-    <link rel="apple-touch-icon" href="/icon-512.png">
+    <link rel="apple-touch-icon" href="https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/0ab8f370-4b11-4c50-83ed-69e067469797?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T195932Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=a9eeae4a8f23f1e3f1381b0a4f10a4c09d367267c637ef043cf7dcb55accb9f63200d3e44f9eb617366ccff60c3a066af03a629a9a3a04f10b9500766cc4b9cdf6f16a6567f1b692793dda9863cf1f1e34848e6d8339454898a0391dc0baaae5369b69a9f06615e7b6826540d7a651089c3fe685ef621e38a2d338b1e2aeeebf70cd3290f8e9de46fc29ab26572b646f8830240a0fa93cd7fd4a16fd034a980dd668030bdefc890acabc774488a41a0f1d488b6d2f974d7768fc631c166d54a327961d60934776aa834318c8ab63a04ffd7846e4580658a0165ea4513cbeedd0aa700d1aa8842b72c69f9e0c46fa2ebfaa0753f2a5f35c4ca81804a334680b73">
     <link rel="manifest" href="/manifest.json">
     <title>断食计时器</title>
     <style>
@@ -259,7 +259,7 @@
                 navigator.serviceWorker.register('/sw.js').then(registration => {
                     console.log('SW registered:', registration);
                 }).catch(error => {
-                    console.log('SW registration failed:', error);
+                    console.error('SW registration failed:', error);
                 });
             });
         }
