@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fasting-timer-v15';
+const CACHE_NAME = 'fasting-timer-v17';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
