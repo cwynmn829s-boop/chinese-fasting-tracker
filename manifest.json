@@ -4,11 +4,11 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#F2F2F7",
-  "theme_color": "#34C759",
-  "description": "iOS 风格断食计时工具",
+  "theme_color": "#00402E",
+  "description": "极简 Apple 风格断食计时工具",
   "icons": [
     {
-      "src": "https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/efbf9c40-3624-465e-ba44-1c6cfdca17f4?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T175139Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=745b74e93061a35bd8a43890abdc7bb8188650a68a5baf0faae5d490c7b56094676e4feb8c502f8b267b74bb03e096d510da16c5993288bbeb268c38e6b3f391c714bd2dc3ec4fb3db721e804e653ea2ad3cd0e1858b9c15b8e96955bc641d195ae5baedf28af5a9d4ac6475a21dba4b34299cd3077c8382de0228c429f925341169cfb3328b34201a28451829945e99f7636622ab3e3ce58ccb6bdc3cfb05e6350a3c7e91ea556bbe7abcb5c2f69177d0e8c61e19f15ad80b82d0dea228d5a1f68b8c18ccbf95d684b362a95b57b42861c3dae9d6ace15a8b1dbbad15ea320aa5e674c43202998237e1d7817b9a6fe5117cd18708ea04e0a9e236e6e484a7a8",
+      "src": "apple-touch-icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
