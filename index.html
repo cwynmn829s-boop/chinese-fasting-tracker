@@ -14,26 +14,29 @@
         :root {
             --ios-bg: #f2f2f7;
             --glass: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(0, 0, 0, 0.05);
-            --accent: #34c759; /* Green Theme */
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --accent: #34c759;
             --text-main: #000000;
             --text-secondary: #8e8e93;
             --danger: #ff3b30;
+            --success: #34c759;
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
         }
 
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
-            margin: 0;
-            padding: 0;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
             background-color: var(--ios-bg);
-            background-image: radial-gradient(circle at 50% -20%, #ffffff 0%, #f2f2f7 100%);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(52, 199, 89, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(52, 199, 89, 0.05) 0px, transparent 50%);
             color: var(--text-main);
+            margin: 0;
             padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
             min-height: 100vh;
             display: flex;
@@ -45,171 +48,158 @@
             width: 100%;
             padding: 40px 0 20px;
             text-align: left;
-            animation: fadeInDown 0.8s ease-out;
+            animation: fadeIn 0.8s ease-out;
         }
 
         h1 {
             font-size: 34px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #000 0%, #34c759 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .main-widget {
             background: var(--glass);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
             border: 1px solid var(--glass-border);
-            border-radius: 38px;
+            border-radius: 40px;
             width: 100%;
             max-width: 400px;
-            padding: 40px 20px;
+            padding: 45px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 20px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
-            animation: scaleIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: var(--shadow);
+            animation: scaleIn 0.6s cubic-bezier(0.15, 0.85, 0.35, 1);
         }
 
         .status-pill {
-            background: rgba(0, 0, 0, 0.05);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
+            background: rgba(52, 199, 89, 0.1);
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
             color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 24px;
-            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            margin-bottom: 30px;
+            transition: all 0.4s ease;
         }
 
         .status-pill.active {
             color: var(--accent);
-            background: rgba(52, 199, 89, 0.1);
+            background: rgba(52, 199, 89, 0.15);
+            box-shadow: 0 0 15px rgba(52, 199, 89, 0.1);
         }
 
         .timer {
-            font-size: 64px;
+            font-size: 72px;
             font-weight: 200;
             font-variant-numeric: tabular-nums;
-            margin-bottom: 40px;
-            letter-spacing: -2px;
+            margin-bottom: 45px;
+            letter-spacing: -3px;
         }
 
         .action-btn {
             background: var(--accent);
             color: white;
             border: none;
-            width: 80px;
-            height: 80px;
-            border-radius: 40px;
-            font-size: 16px;
-            font-weight: 600;
+            width: 90px;
+            height: 90px;
+            border-radius: 45px;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 8px 20px rgba(52, 199, 89, 0.2);
+            box-shadow: 0 10px 25px rgba(52, 199, 89, 0.3);
         }
 
         .action-btn:active {
-            transform: scale(0.95);
-            opacity: 0.8;
+            transform: scale(0.9);
+            box-shadow: 0 5px 15px rgba(52, 199, 89, 0.2);
         }
 
         .action-btn.stop {
             background: var(--danger);
-            box-shadow: 0 8px 20px rgba(255, 59, 48, 0.2);
+            box-shadow: 0 10px 25px rgba(255, 59, 48, 0.3);
         }
 
         .history-section {
             width: 100%;
             max-width: 400px;
-            margin-top: 40px;
+            margin-top: 45px;
             animation: fadeInUp 0.8s ease-out;
         }
 
         .history-header {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 16px;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
             padding-left: 10px;
         }
 
-        .history-container {
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .swipe-container {
+            position: relative;
+            width: 100%;
+            height: 72px;
             border-radius: 24px;
             overflow: hidden;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-        }
-
-        .history-item-wrapper {
-            position: relative;
-            overflow: hidden;
             background: var(--danger);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .history-item-wrapper:last-child {
-            border-bottom: none;
-        }
-
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            background: white;
-            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.15);
-            position: relative;
-            z-index: 2;
-            cursor: grab;
         }
 
         .delete-btn {
             position: absolute;
             right: 0;
             top: 0;
-            bottom: 0;
+            height: 100%;
             width: 80px;
-            background: var(--danger);
-            color: white;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-weight: 600;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
             font-size: 14px;
-            z-index: 1;
-            cursor: pointer;
         }
 
-        .history-date {
-            font-size: 16px;
-            font-weight: 400;
+        .history-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2;
+            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
 
-        .history-duration {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
+        .history-date { font-size: 17px; font-weight: 500; }
+        .history-duration { font-size: 17px; font-weight: 600; color: var(--accent); }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -218,24 +208,21 @@
     </div>
 
     <div class="main-widget">
-        <div id="status" class="status-pill">等待中</div>
+        <div id="status" class="status-pill">准备中</div>
         <div id="timer" class="timer">00:00:00</div>
         <button id="toggleBtn" class="action-btn">开始</button>
     </div>
 
     <div class="history-section">
-        <div class="history-header">最近记录</div>
-        <div class="history-container" id="historyList">
-            <!-- Items injected by JS -->
-        </div>
+        <div class="history-header">历史记录</div>
+        <div class="history-list" id="historyList"></div>
     </div>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js');
-            });
-        }
+        // Haptic function
+        const haptic = (strength = 10) => {
+            if ('vibrate' in navigator) navigator.vibrate(strength);
+        };
 
         let startTime = localStorage.getItem('fastStartTime');
         let history = JSON.parse(localStorage.getItem('fastHistory') || '[]');
@@ -245,16 +232,10 @@
         const historyList = document.getElementById('historyList');
         let interval;
 
-        function hapticFeedback() {
-            if (navigator.vibrate) {
-                navigator.vibrate(15);
-            }
-        }
-
         function updateDisplay() {
             if (!startTime) {
                 timerDisplay.textContent = "00:00:00";
-                statusDisplay.textContent = "等待中";
+                statusDisplay.textContent = "准备中";
                 statusDisplay.classList.remove('active');
                 toggleBtn.textContent = "开始";
                 toggleBtn.classList.remove('stop');
@@ -264,21 +245,19 @@
 
             const now = new Date().getTime();
             const diff = now - parseInt(startTime);
-            
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            const hours = Math.floor(diff / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
 
-            timerDisplay.textContent = 
-                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
             statusDisplay.textContent = "断食中";
             statusDisplay.classList.add('active');
             toggleBtn.textContent = "停止";
             toggleBtn.classList.add('stop');
         }
 
-        function deleteHistoryItem(index) {
-            hapticFeedback();
+        function deleteItem(index) {
+            haptic(20);
             history.splice(index, 1);
             localStorage.setItem('fastHistory', JSON.stringify(history));
             renderHistory();
@@ -286,67 +265,64 @@
 
         function renderHistory() {
             if (history.length === 0) {
-                historyList.innerHTML = '<div style="padding: 20px; text-align: center; color: #8e8e93;">暂无记录</div>';
+                historyList.innerHTML = '<div style="text-align:center;color:#8e8e93;padding:20px;">暂无数据</div>';
                 return;
             }
             
-            historyList.innerHTML = '';
-            // Display last 5 items
-            const displayHistory = [...history].reverse().slice(0, 5);
-            
-            displayHistory.forEach((item, revIndex) => {
-                const originalIndex = history.length - 1 - revIndex;
-                const wrapper = document.createElement('div');
-                wrapper.className = 'history-item-wrapper';
-                
-                wrapper.innerHTML = `
-                    <div class="delete-btn" onclick="deleteHistoryItem(${originalIndex})">删除</div>
-                    <div class="history-item" id="item-${originalIndex}">
-                        <span class="history-date">${new Date(item.end).toLocaleDateString('zh-CN', {month: 'short', day: 'numeric'})}</span>
-                        <span class="history-duration">${item.duration}</span>
+            historyList.innerHTML = history.slice().reverse().map((f, i) => {
+                const actualIndex = history.length - 1 - i;
+                return `
+                    <div class="swipe-container">
+                        <div class="delete-btn" onclick="deleteItem(${actualIndex})">删除</div>
+                        <div class="history-item" 
+                             ontouchstart="handleTouchStart(event)" 
+                             ontouchmove="handleTouchMove(event)" 
+                             ontouchend="handleTouchEnd(event)">
+                            <span class="history-date">${new Date(f.end).toLocaleDateString('zh-CN', {month:'short', day:'numeric'})}</span>
+                            <span class="history-duration">${f.duration}</span>
+                        </div>
                     </div>
                 `;
-                
-                const element = wrapper.querySelector('.history-item');
-                let startX = 0;
-                let currentTranslate = 0;
+            }).join('');
+        }
 
-                element.addEventListener('touchstart', (e) => {
-                    startX = e.touches[0].clientX;
-                    element.style.transition = 'none';
-                });
+        // Swipe logic
+        let xDown = null;
+        let currentItem = null;
 
-                element.addEventListener('touchmove', (e) => {
-                    const diff = e.touches[0].clientX - startX;
-                    if (diff < 0) { // Swipe left
-                        currentTranslate = Math.max(diff, -80);
-                        element.style.transform = `translateX(${currentTranslate}px)`;
-                    } else if (currentTranslate < 0) { // Swipe right to close
-                        currentTranslate = Math.min(diff - 80, 0);
-                        element.style.transform = `translateX(${currentTranslate}px)`;
-                    }
-                });
+        function handleTouchStart(evt) {
+            xDown = evt.touches[0].clientX;
+            currentItem = evt.currentTarget;
+            currentItem.style.transition = 'none';
+        }
 
-                element.addEventListener('touchend', () => {
-                    element.style.transition = 'transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.15)';
-                    if (currentTranslate < -40) {
-                        currentTranslate = -80;
-                        hapticFeedback();
-                    } else {
-                        currentTranslate = 0;
-                    }
-                    element.style.transform = `translateX(${currentTranslate}px)`;
-                });
+        function handleTouchMove(evt) {
+            if (!xDown) return;
+            let xDiff = xDown - evt.touches[0].clientX;
+            if (xDiff > 0) {
+                let move = Math.min(xDiff, 80);
+                currentItem.style.transform = `translateX(-${move}px)`;
+            } else {
+                currentItem.style.transform = `translateX(0px)`;
+            }
+        }
 
-                historyList.appendChild(wrapper);
-            });
+        function handleTouchEnd(evt) {
+            currentItem.style.transition = 'transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
+            let xDiff = xDown - evt.changedTouches[0].clientX;
+            if (xDiff > 40) {
+                currentItem.style.transform = `translateX(-80px)`;
+                haptic(5);
+            } else {
+                currentItem.style.transform = `translateX(0px)`;
+            }
+            xDown = null;
         }
 
         toggleBtn.onclick = () => {
-            hapticFeedback();
+            haptic(15);
             if (startTime) {
-                const duration = timerDisplay.textContent;
-                history.push({ end: new Date().getTime(), duration });
+                history.push({ end: new Date().getTime(), duration: timerDisplay.textContent });
                 localStorage.setItem('fastHistory', JSON.stringify(history));
                 localStorage.removeItem('fastStartTime');
                 startTime = null;
@@ -359,11 +335,14 @@
             updateDisplay();
         };
 
-        if (startTime) {
-            interval = setInterval(updateDisplay, 1000);
-            updateDisplay();
-        }
+        if (startTime) { interval = setInterval(updateDisplay, 1000); updateDisplay(); }
         renderHistory();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js?v=ios26-v2');
+            });
+        }
     </script>
 </body>
 </html>
