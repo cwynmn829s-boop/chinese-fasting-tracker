@@ -57,9 +57,7 @@
             width: 100%;
             overflow-y: scroll;
             -webkit-overflow-scrolling: touch;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
             padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
         }
 
@@ -71,172 +69,70 @@
         .header { width: 100%; padding: 34px 4px 12px; }
         h1 { font-size: 34px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
 
-        /* 主计时组件 */
         .main-widget {
-            background: var(--glass);
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
-            border: 0.5px solid rgba(0, 0, 0, 0.05);
-            border-radius: 38px;
-            width: 100%;
-            max-width: 400px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            transition: transform 0.6s var(--ios-curve), box-shadow 0.6s var(--ios-curve);
+            background: var(--glass); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 0.5px solid rgba(0, 0, 0, 0.05); border-radius: 38px; width: 100%; max-width: 400px;
+            padding: 24px; display: flex; flex-direction: column; align-items: center; margin-top: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: transform 0.6s var(--ios-curve), box-shadow 0.6s var(--ios-curve);
         }
-        .main-widget.active {
-            box-shadow: 0 20px 40px rgba(52, 199, 89, 0.12);
-            transform: scale(1.02);
-        }
+        .main-widget.active { box-shadow: 0 20px 40px rgba(52, 199, 89, 0.12); transform: scale(1.02); }
 
-        /* 断食方案选择 */
-        .protocol-selector {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            width: 100%;
-            justify-content: center;
-            position: relative;
-        }
+        .protocol-selector { display: flex; gap: 12px; margin-bottom: 24px; width: 100%; justify-content: center; }
         .protocol-chip {
-            padding: 10px 20px;
-            background: rgba(0,0,0,0.04);
-            border-radius: 14px;
-            font-size: 15px;
-            color: var(--ios-secondary-label);
-            transition: all 0.4s var(--ios-curve);
-            cursor: pointer;
+            padding: 10px 20px; background: rgba(0,0,0,0.04); border-radius: 14px; font-size: 15px; color: var(--ios-secondary-label);
+            transition: all 0.4s var(--ios-curve); cursor: pointer;
         }
-        .protocol-chip:active {
-            transform: scale(0.92);
-            background: rgba(0,0,0,0.08);
-        }
-        .protocol-chip.active {
-            background: var(--ios-accent);
-            color: white;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.25);
-            transform: translateY(-2px);
-        }
+        .protocol-chip:active { transform: scale(0.92); }
+        .protocol-chip.active { background: var(--ios-accent); color: white; font-weight: 600; box-shadow: 0 4px 12px rgba(52, 199, 89, 0.25); }
 
-        .timer-container {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 10px 0 30px;
-        }
-        .timer { 
-            font-size: 64px; 
-            font-weight: 200; 
-            font-variant-numeric: tabular-nums; 
-            letter-spacing: -2px;
-            transition: transform 0.6s var(--ios-curve), color 0.4s ease;
-        }
-        .timer.running {
-            color: var(--ios-accent);
-            transform: scale(1.05);
-        }
+        .timer-container { position: relative; display: flex; flex-direction: column; align-items: center; margin: 10px 0 30px; }
+        .timer { font-size: 64px; font-weight: 200; font-variant-numeric: tabular-nums; letter-spacing: -2px; transition: transform 0.6s var(--ios-curve), color 0.4s ease; }
+        .timer.running { color: var(--ios-accent); transform: scale(1.05); }
 
         .action-btn {
-            background: var(--ios-accent);
-            color: white;
-            border: none;
-            width: 80px;
-            height: 80px;
-            border-radius: 40px;
-            font-size: 17px;
-            font-weight: 600;
-            box-shadow: 0 6px 16px rgba(52, 199, 89, 0.3);
-            transition: all 0.4s var(--ios-curve);
+            background: var(--ios-accent); color: white; border: none; width: 80px; height: 80px; border-radius: 40px; font-size: 17px; font-weight: 600;
+            box-shadow: 0 6px 16px rgba(52, 199, 89, 0.3); transition: all 0.4s var(--ios-curve);
         }
-        .action-btn:active { transform: scale(0.88); box-shadow: 0 2px 8px rgba(52, 199, 89, 0.2); }
-        .action-btn.stop { 
-            background: var(--ios-danger); 
-            box-shadow: 0 6px 16px rgba(255, 59, 48, 0.3); 
-        }
+        .action-btn:active { transform: scale(0.88); }
+        .action-btn.stop { background: var(--ios-danger); box-shadow: 0 6px 16px rgba(255, 59, 48, 0.3); }
 
-        /* 数据网格 */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            width: 100%;
-            margin-top: 28px;
-        }
-        .stat-card {
-            background: white;
-            padding: 14px;
-            border-radius: 20px;
-            text-align: center;
-            transition: transform 0.4s var(--ios-curve);
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; margin-top: 28px; }
+        .stat-card { background: white; padding: 14px; border-radius: 20px; text-align: center; transition: transform 0.4s var(--ios-curve); }
         .stat-card:active { transform: scale(0.94); }
-        .stat-val { font-size: 20px; font-weight: 700; color: var(--ios-accent); display: block; transition: all 0.3s ease; }
+        .stat-val { font-size: 20px; font-weight: 700; color: var(--ios-accent); display: block; }
         .stat-lab { font-size: 11px; color: var(--ios-secondary-label); margin-top: 4px; font-weight: 500; }
 
-        /* 通用区块样式 */
         .tool-section { width: 100%; max-width: 400px; margin-top: 28px; }
-        .section-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 16px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 16px; }
         .section-title { font-size: 13px; color: var(--ios-secondary-label); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin: 0; }
-        .toggle-text { font-size: 13px; color: #007AFF; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-        .toggle-text:active { opacity: 0.6; }
-        
-        .tool-card {
-            background: var(--ios-group-bg);
-            border-radius: 22px;
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-bottom: 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            transition: transform 0.4s var(--ios-curve);
-        }
+        .expand-toggle { font-size: 13px; color: #007AFF; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+        .expand-toggle:active { opacity: 0.6; }
 
-        /* 体重记录 */
+        .tool-card { background: var(--ios-group-bg); border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+
         .weight-input-container { display: flex; justify-content: space-between; align-items: center; }
-        .weight-input { border: none; background: #F2F2F7; padding: 10px 14px; border-radius: 12px; width: 100px; text-align: center; font-size: 17px; outline: none; transition: background 0.3s; font-weight: 600; }
-        .weight-input:focus { background: #E5E5EA; }
+        .weight-input { border: none; background: #F2F2F7; padding: 10px 14px; border-radius: 12px; width: 100px; text-align: center; font-size: 17px; outline: none; font-weight: 600; }
         
-        /* 可折叠图表容器 */
-        .chart-collapsible {
-            height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: height 0.6s var(--ios-curve), opacity 0.5s var(--ios-curve), margin-top 0.6s var(--ios-curve);
-            margin-top: 0;
+        .chart-expand-wrapper { 
+            height: 0; opacity: 0; overflow: hidden; 
+            transition: height 0.6s var(--ios-curve), opacity 0.4s var(--ios-curve);
         }
-        .chart-collapsible.expanded {
-            height: 270px; /* 220px canvas + controls */
-            opacity: 1;
-            margin-top: 14px;
-        }
-        .chart-container { 
-            background: #F9F9FB; border-radius: 18px; padding: 12px; height: 220px; position: relative;
-        }
+        .chart-expand-wrapper.expanded { height: 260px; opacity: 1; }
+        .chart-container { background: white; border-radius: 18px; padding: 12px; margin-top: 12px; height: 220px; position: relative; }
         .chart-controls { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
-        .zoom-btn { background: #F2F2F7; border: none; border-radius: 8px; padding: 6px 12px; font-size: 13px; color: var(--ios-secondary-label); font-weight: 600; transition: all 0.2s; }
-        .zoom-btn:active { background: #E5E5EA; transform: scale(0.92); }
+        .zoom-btn { background: #F2F2F7; border: none; border-radius: 8px; padding: 6px 12px; font-size: 13px; color: var(--ios-secondary-label); font-weight: 600; }
 
-        /* 历史记录 */
         .history-list { background: var(--ios-group-bg); border-radius: 22px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .history-row-wrapper { 
             position: relative; overflow: hidden; background-color: var(--ios-danger); 
-            transition: max-height 0.5s var(--ios-curve), opacity 0.4s ease;
-            max-height: 100px;
+            transition: max-height 0.5s var(--ios-curve), opacity 0.4s ease; max-height: 100px;
         }
-        .history-row-wrapper.deleting { max-height: 0; opacity: 0; pointer-events: none; }
+        .history-row-wrapper.deleting { max-height: 0; opacity: 0; }
         .history-item { 
             background: var(--ios-group-bg); display: flex; justify-content: space-between; padding: 16px 20px; 
             position: relative; z-index: 2; transition: transform 0.5s var(--ios-curve); 
             border-bottom: 0.5px solid rgba(0,0,0,0.05);
         }
-        .history-item:last-child { border-bottom: none; }
         .delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: var(--ios-danger); color: white; display: flex; justify-content: center; align-items: center; z-index: 1; font-weight: 700; font-size: 15px; }
         .swiped .history-item { transform: translateX(-80px); }
     </style>
@@ -264,16 +160,16 @@
         </div>
 
         <div class="tool-section">
-            <div class="section-title-row">
-                <p class="section-title">体重记录 (公斤)</p>
-                <span class="toggle-text" id="chartToggle">展开图表</span>
+            <div class="section-header">
+                <p class="section-title">体重曲线 (公斤)</p>
+                <span class="expand-toggle" id="chartToggle">展开图表</span>
             </div>
             <div class="tool-card">
                 <div class="weight-input-container">
                     <span>记录今日体重</span>
                     <input type="number" step="0.1" class="weight-input" id="weightInput" placeholder="0.0">
                 </div>
-                <div class="chart-collapsible" id="chartCollapsible">
+                <div class="chart-expand-wrapper" id="chartWrapper">
                     <div class="chart-container">
                         <canvas id="weightChart"></canvas>
                     </div>
@@ -286,9 +182,7 @@
         </div>
 
         <div class="tool-section">
-            <div class="section-title-row">
-                <p class="section-title">历史记录</p>
-            </div>
+            <div class="section-header"><p class="section-title">历史记录</p></div>
             <div class="history-list" id="historyList"></div>
         </div>
     </div>
@@ -306,7 +200,7 @@
         const weightInput = document.getElementById('weightInput');
         const historyList = document.getElementById('historyList');
         const chartToggle = document.getElementById('chartToggle');
-        const chartCollapsible = document.getElementById('chartCollapsible');
+        const chartWrapper = document.getElementById('chartWrapper');
 
         function haptic() { if ("vibrate" in navigator) navigator.vibrate(10); }
 
@@ -340,19 +234,10 @@
             document.getElementById('statRate').textContent = rate + "%";
         }
 
-        // 图表折叠逻辑
-        chartToggle.onclick = () => {
-            haptic();
-            const isExpanded = chartCollapsible.classList.toggle('expanded');
-            chartToggle.textContent = isExpanded ? '收起图表' : '展开图表';
-            if (isExpanded && !weightChart) initChart();
-        };
-
         let weightChart;
         function initChart() {
             const ctx = document.getElementById('weightChart').getContext('2d');
             const data = weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
-            
             weightChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -362,47 +247,36 @@
                         data: data.map(d => d.val),
                         borderColor: '#34C759',
                         backgroundColor: 'rgba(52, 199, 89, 0.12)',
-                        borderWidth: 3,
-                        tension: 0.45,
-                        fill: true,
-                        pointBackgroundColor: '#34C759',
-                        pointBorderColor: 'white',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
+                        borderWidth: 3, tension: 0.45, fill: true,
+                        pointBackgroundColor: '#34C759', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 5
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        duration: 1000,
-                        easing: 'easeOutQuart'
-                    },
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { display: true, grid: { color: 'rgba(0,0,0,0.03)' }, ticks: { font: { weight: '600' } } },
-                        x: { display: true, grid: { display: false }, ticks: { font: { weight: '500' } } }
+                        y: { display: true, grid: { color: 'rgba(0,0,0,0.03)' } },
+                        x: { display: true, grid: { display: false } }
                     }
                 }
             });
         }
 
-        function updateChart() {
-            if (!weightChart) return;
-            const data = weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
-            weightChart.data.labels = data.map(d => d.date.split('-').slice(1).join('/'));
-            weightChart.data.datasets[0].data = data.map(d => d.val);
-            weightChart.update();
-        }
+        chartToggle.onclick = () => {
+            haptic();
+            const isExpanding = !chartWrapper.classList.contains('expanded');
+            chartWrapper.classList.toggle('expanded');
+            chartToggle.textContent = isExpanding ? "收起图表" : "展开图表";
+            if (isExpanding && !weightChart) {
+                setTimeout(initChart, 300);
+            }
+        };
 
         function zoomChart(factor) {
             haptic();
             const container = document.querySelector('.chart-container');
-            const currentHeight = container.clientHeight;
-            container.style.height = (currentHeight / factor) + 'px';
-            // 联动调整外层高度
-            chartCollapsible.style.height = (currentHeight / factor + 50) + 'px';
+            container.style.height = (container.clientHeight / factor) + 'px';
+            chartWrapper.style.height = (container.clientHeight + 40) + 'px';
         }
 
         weightInput.onchange = (e) => {
@@ -413,10 +287,13 @@
             if (existing) existing.val = val;
             else weightHistory.push({ date, val });
             localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
-            updateChart();
-            haptic();
-            e.target.value = '';
-            e.target.blur();
+            if (weightChart) {
+                const data = weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
+                weightChart.data.labels = data.map(d => d.date.split('-').slice(1).join('/'));
+                weightChart.data.datasets[0].data = data.map(d => d.val);
+                weightChart.update();
+            }
+            haptic(); e.target.value = ''; e.target.blur();
         };
 
         function renderHistory() {
@@ -427,7 +304,6 @@
                 wrapper.className = 'history-row-wrapper';
                 wrapper.innerHTML = `<div class="delete-btn" onclick="deleteItem(${idx}, this)">删除</div>
                     <div class="history-item"><span>${new Date(item.end).toLocaleDateString('zh-CN')}</span><span>${item.duration}小时</span></div>`;
-                
                 const itemEl = wrapper.querySelector('.history-item');
                 let startX = 0;
                 itemEl.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
@@ -446,8 +322,7 @@
             setTimeout(() => {
                 history.splice(idx, 1); 
                 localStorage.setItem('fastHistory', JSON.stringify(history)); 
-                renderHistory(); 
-                renderStats(); 
+                renderHistory(); renderStats(); 
             }, 400);
         }
 
@@ -482,6 +357,14 @@
 
         if (startTime) { interval = setInterval(updateDisplay, 1000); updateDisplay(); }
         renderHistory(); renderStats();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js?v=5').then(reg => {
+                    console.log('SW registered');
+                }).catch(err => console.log('SW failed', err));
+            });
+        }
     </script>
 </body>
 </html>
