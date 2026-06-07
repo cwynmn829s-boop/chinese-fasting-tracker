@@ -6,6 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="轻断食">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/plasticine/512/apple-health.png">
     <link rel="manifest" href="manifest.json">
     <title>断食追踪器</title>
     <style>
@@ -92,6 +93,15 @@
     </div>
 
     <script>
+        // Service Worker registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered'))
+                    .catch(err => console.log('SW failed', err));
+            });
+        }
+
         let startTime = localStorage.getItem('fastStartTime');
         let history = JSON.parse(localStorage.getItem('fastHistory') || '[]');
         const timerDisplay = document.getElementById('timer');
