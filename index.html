@@ -30,6 +30,16 @@
             user-select: none;
         }
 
+        html, body {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            overflow-x: hidden;
+        }
+
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
             background-color: var(--ios-bg);
@@ -40,12 +50,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            overflow-x: hidden;
         }
-
-        body::-webkit-scrollbar { display: none; }
 
         .header { width: 100%; padding: 34px 4px 12px; }
         h1 { font-size: 34px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
@@ -74,7 +79,11 @@
             margin-bottom: 20px;
             width: 100%;
             justify-content: center;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
+        .protocol-selector::-webkit-scrollbar { display: none; }
+        
         .protocol-chip {
             padding: 8px 16px;
             background: rgba(0,0,0,0.05);
@@ -82,6 +91,7 @@
             font-size: 14px;
             color: var(--ios-secondary-label);
             transition: all 0.3s;
+            white-space: nowrap;
         }
         .protocol-chip.active {
             background: var(--ios-accent);
@@ -153,12 +163,23 @@
         .chart-container { 
             background: white; border-radius: 12px; padding: 12px; margin-top: 12px; height: 200px; position: relative;
             overflow: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
+        .chart-container::-webkit-scrollbar { display: none; }
         .chart-controls { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
         .zoom-btn { background: #F2F2F7; border: none; border-radius: 6px; padding: 4px 8px; font-size: 12px; color: var(--ios-secondary-label); }
 
         /* 历史记录 */
-        .history-list { background: var(--ios-group-bg); border-radius: 12px; overflow: hidden; }
+        .history-list { 
+            background: var(--ios-group-bg); 
+            border-radius: 12px; 
+            overflow: hidden; 
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        .history-list::-webkit-scrollbar { display: none; }
+
         .history-row-wrapper { position: relative; overflow: hidden; background-color: var(--ios-danger); }
         .history-item { background: var(--ios-group-bg); display: flex; justify-content: space-between; padding: 14px 16px; position: relative; z-index: 2; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); border-bottom: 0.5px solid var(--ios-separator); }
         .history-item:last-child { border-bottom: none; }
