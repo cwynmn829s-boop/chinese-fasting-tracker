@@ -4,36 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="断食计时器">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#ffffff">
     <link rel="apple-touch-icon" href="https://img.icons8.com/plasticine/512/apple-health.png">
     <link rel="manifest" href="manifest.json">
     <title>断食计时器</title>
     <style>
         :root {
-            --ios-bg: #000000;
-            --glass: rgba(28, 28, 30, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --accent: #5e5ce6;
-            --text-main: #ffffff;
+            --ios-bg: #f2f2f7;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --accent: #34c759; /* Green Theme */
+            --text-main: #000000;
             --text-secondary: #8e8e93;
-            --danger: #ff453a;
-            --success: #32d74b;
+            --danger: #ff3b30;
         }
 
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
             background-color: var(--ios-bg);
-            background-image: radial-gradient(circle at 50% -20%, #1c1c1e 0%, #000000 100%);
+            background-image: radial-gradient(circle at 50% -20%, #ffffff 0%, #f2f2f7 100%);
             color: var(--text-main);
-            margin: 0;
             padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
             min-height: 100vh;
             display: flex;
@@ -51,7 +51,6 @@
         h1 {
             font-size: 34px;
             font-weight: 700;
-            margin: 0;
             letter-spacing: -0.5px;
         }
 
@@ -68,12 +67,12 @@
             flex-direction: column;
             align-items: center;
             margin-top: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
             animation: scaleIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .status-pill {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.05);
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 13px;
@@ -87,7 +86,7 @@
 
         .status-pill.active {
             color: var(--accent);
-            background: rgba(94, 92, 230, 0.15);
+            background: rgba(52, 199, 89, 0.1);
         }
 
         .timer {
@@ -108,20 +107,21 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
+            transition: transform 0.1s, opacity 0.2s;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 20px rgba(94, 92, 230, 0.3);
+            box-shadow: 0 8px 20px rgba(52, 199, 89, 0.2);
         }
 
         .action-btn:active {
-            transform: scale(0.92);
+            transform: scale(0.95);
+            opacity: 0.8;
         }
 
         .action-btn.stop {
             background: var(--danger);
-            box-shadow: 0 0 20px rgba(255, 69, 58, 0.3);
+            box-shadow: 0 8px 20px rgba(255, 59, 48, 0.2);
         }
 
         .history-section {
@@ -138,25 +138,51 @@
             padding-left: 10px;
         }
 
-        .history-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+        .history-container {
             border-radius: 24px;
-            padding: 8px 16px;
+            overflow: hidden;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+        }
+
+        .history-item-wrapper {
+            position: relative;
+            overflow: hidden;
+            background: var(--danger);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .history-item-wrapper:last-child {
+            border-bottom: none;
         }
 
         .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px 20px;
+            background: white;
+            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.15);
+            position: relative;
+            z-index: 2;
+            cursor: grab;
         }
 
-        .history-item:last-child {
-            border-bottom: none;
+        .delete-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            background: var(--danger);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 1;
+            cursor: pointer;
         }
 
         .history-date {
@@ -192,14 +218,14 @@
     </div>
 
     <div class="main-widget">
-        <div id="status" class="status-pill">Standby</div>
+        <div id="status" class="status-pill">等待中</div>
         <div id="timer" class="timer">00:00:00</div>
-        <button id="toggleBtn" class="action-btn">Start</button>
+        <button id="toggleBtn" class="action-btn">开始</button>
     </div>
 
     <div class="history-section">
         <div class="history-header">最近记录</div>
-        <div class="history-card" id="historyList">
+        <div class="history-container" id="historyList">
             <!-- Items injected by JS -->
         </div>
     </div>
@@ -207,7 +233,7 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(reg => { reg.onupdatefound = () => { const installingWorker = reg.installing; installingWorker.onstatechange = () => { if (installingWorker.state === 'installed') { if (navigator.serviceWorker.controller) { window.location.reload(); } } }; }; });
+                navigator.serviceWorker.register('/sw.js');
             });
         }
 
@@ -219,12 +245,18 @@
         const historyList = document.getElementById('historyList');
         let interval;
 
+        function hapticFeedback() {
+            if (navigator.vibrate) {
+                navigator.vibrate(15);
+            }
+        }
+
         function updateDisplay() {
             if (!startTime) {
                 timerDisplay.textContent = "00:00:00";
-                statusDisplay.textContent = "Standby";
+                statusDisplay.textContent = "等待中";
                 statusDisplay.classList.remove('active');
-                toggleBtn.textContent = "Start";
+                toggleBtn.textContent = "开始";
                 toggleBtn.classList.remove('stop');
                 clearInterval(interval);
                 return;
@@ -239,26 +271,79 @@
 
             timerDisplay.textContent = 
                 `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            statusDisplay.textContent = "Fasting";
+            statusDisplay.textContent = "断食中";
             statusDisplay.classList.add('active');
-            toggleBtn.textContent = "Stop";
+            toggleBtn.textContent = "停止";
             toggleBtn.classList.add('stop');
+        }
+
+        function deleteHistoryItem(index) {
+            hapticFeedback();
+            history.splice(index, 1);
+            localStorage.setItem('fastHistory', JSON.stringify(history));
+            renderHistory();
         }
 
         function renderHistory() {
             if (history.length === 0) {
-                historyList.innerHTML = '<div class="history-item"><span class="history-date" style="color: #8e8e93">暂无记录</span></div>';
+                historyList.innerHTML = '<div style="padding: 20px; text-align: center; color: #8e8e93;">暂无记录</div>';
                 return;
             }
-            historyList.innerHTML = history.slice(-5).reverse().map(f => `
-                <div class="history-item">
-                    <span class="history-date">${new Date(f.end).toLocaleDateString('zh-CN', {month: 'short', day: 'numeric'})}</span>
-                    <span class="history-duration">${f.duration}</span>
-                </div>
-            `).join('');
+            
+            historyList.innerHTML = '';
+            // Display last 5 items
+            const displayHistory = [...history].reverse().slice(0, 5);
+            
+            displayHistory.forEach((item, revIndex) => {
+                const originalIndex = history.length - 1 - revIndex;
+                const wrapper = document.createElement('div');
+                wrapper.className = 'history-item-wrapper';
+                
+                wrapper.innerHTML = `
+                    <div class="delete-btn" onclick="deleteHistoryItem(${originalIndex})">删除</div>
+                    <div class="history-item" id="item-${originalIndex}">
+                        <span class="history-date">${new Date(item.end).toLocaleDateString('zh-CN', {month: 'short', day: 'numeric'})}</span>
+                        <span class="history-duration">${item.duration}</span>
+                    </div>
+                `;
+                
+                const element = wrapper.querySelector('.history-item');
+                let startX = 0;
+                let currentTranslate = 0;
+
+                element.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    element.style.transition = 'none';
+                });
+
+                element.addEventListener('touchmove', (e) => {
+                    const diff = e.touches[0].clientX - startX;
+                    if (diff < 0) { // Swipe left
+                        currentTranslate = Math.max(diff, -80);
+                        element.style.transform = `translateX(${currentTranslate}px)`;
+                    } else if (currentTranslate < 0) { // Swipe right to close
+                        currentTranslate = Math.min(diff - 80, 0);
+                        element.style.transform = `translateX(${currentTranslate}px)`;
+                    }
+                });
+
+                element.addEventListener('touchend', () => {
+                    element.style.transition = 'transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.15)';
+                    if (currentTranslate < -40) {
+                        currentTranslate = -80;
+                        hapticFeedback();
+                    } else {
+                        currentTranslate = 0;
+                    }
+                    element.style.transform = `translateX(${currentTranslate}px)`;
+                });
+
+                historyList.appendChild(wrapper);
+            });
         }
 
         toggleBtn.onclick = () => {
+            hapticFeedback();
             if (startTime) {
                 const duration = timerDisplay.textContent;
                 history.push({ end: new Date().getTime(), duration });
