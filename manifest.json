@@ -1,17 +1,25 @@
 {
   "name": "断食计时器",
-  "short_name": "断食计时器",
-  "start_url": "/",
+  "short_name": "断食计时",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#F2F2F7",
-  "theme_color": "#34C759",
+  "theme_color": "#F2F2F7",
   "description": "iOS 26 风格断食计时工具",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "apple-touch-icon.png",
-      "sizes": "1024x1024",
+      "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
