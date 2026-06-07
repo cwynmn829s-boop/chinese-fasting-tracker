@@ -8,7 +8,7 @@
   "description": "iOS 26 风格断食计时工具",
   "icons": [
     {
-      "src": "icon-512.png",
+      "src": "https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/d42e1cb4-8f48-4df0-b711-5e71219c9112?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T173923Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=a5ab4c9f109e6f08966807c66061393cf37e89f6918f1b17130ffb3bf46f112e6e2c9d02cdedf9b7799ea392493491ab11dd5d104c0cb55e85ea167e9860601eef706a766c55c55e1d3b94a9b5941c85f9ff73c656ce6d7a429c82a6b30d9c5dd2afef5f9b6ed54bf4209835a84e3856d521fcbd4ef2f7b747f8e6c794e686f7e186d057edfe111fbdd8a7cfbcc67ce0dcbc2bb4325b19471c5ed449bec6e6766ae7762770b2e05743cfd3d5d67a18e164ba21191c4133adff1e76e18c1b08a13a33710c31d809ef58fde99893ede21f549be84e2d118ffc985825b36a3c3fb0d2e64a589c24289a04da84d3d792da76b7e3c9f29082fb1025129cbac372469a",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
