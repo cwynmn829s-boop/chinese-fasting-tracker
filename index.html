@@ -50,15 +50,41 @@
             top: 0;
             left: 0;
             background-color: var(--ios-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
+        /* 响应式大屏优化：将应用限制在中心容器中 */
         #app-wrapper {
             height: 100%;
             width: 100%;
+            max-width: 480px; /* 大屏下的最大宽度 */
+            margin: 0 auto;
             overflow-y: scroll;
             -webkit-overflow-scrolling: touch;
-            display: flex; flex-direction: column; align-items: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+            background-color: var(--ios-bg);
+            position: relative;
+        }
+
+        /* 在平板/桌面端添加玻璃拟态容器感 */
+        @media (min-width: 500px) {
+            body {
+                background: linear-gradient(135deg, #E5E5EA 0%, #F2F2F7 100%);
+            }
+            #app-wrapper {
+                height: 92vh;
+                margin: 4vh auto;
+                border-radius: 44px;
+                box-shadow: 0 30px 60px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.05);
+                border: 1px solid rgba(255, 255, 255, 0.8);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+            }
         }
 
         body {
@@ -66,73 +92,177 @@
             color: var(--ios-label);
         }
 
+        /* 动画基础 */
+        .spring-transition {
+            transition: all 0.5s var(--ios-curve);
+        }
+
         .header { width: 100%; padding: 34px 4px 12px; }
         h1 { font-size: 34px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
 
+        /* 主计时组件 */
         .main-widget {
-            background: var(--glass); backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%);
-            border: 0.5px solid rgba(0, 0, 0, 0.05); border-radius: 38px; width: 100%; max-width: 400px;
-            padding: 24px; display: flex; flex-direction: column; align-items: center; margin-top: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: transform 0.6s var(--ios-curve), box-shadow 0.6s var(--ios-curve);
+            background: var(--glass);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 0.5px solid rgba(0, 0, 0, 0.05);
+            border-radius: 38px;
+            width: 100%;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            transition: transform 0.6s var(--ios-curve), box-shadow 0.6s var(--ios-curve);
         }
-        .main-widget.active { box-shadow: 0 20px 40px rgba(52, 199, 89, 0.12); transform: scale(1.02); }
+        .main-widget.active {
+            box-shadow: 0 20px 40px rgba(52, 199, 89, 0.12);
+            transform: scale(1.02);
+        }
 
-        .protocol-selector { display: flex; gap: 12px; margin-bottom: 24px; width: 100%; justify-content: center; }
+        /* 断食方案选择 */
+        .protocol-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            width: 100%;
+            justify-content: center;
+            position: relative;
+        }
         .protocol-chip {
-            padding: 10px 20px; background: rgba(0,0,0,0.04); border-radius: 14px; font-size: 15px; color: var(--ios-secondary-label);
-            transition: all 0.4s var(--ios-curve); cursor: pointer;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.04);
+            border-radius: 14px;
+            font-size: 15px;
+            color: var(--ios-secondary-label);
+            transition: all 0.4s var(--ios-curve);
+            cursor: pointer;
         }
-        .protocol-chip:active { transform: scale(0.92); }
-        .protocol-chip.active { background: var(--ios-accent); color: white; font-weight: 600; box-shadow: 0 4px 12px rgba(52, 199, 89, 0.25); }
+        .protocol-chip:active {
+            transform: scale(0.92);
+            background: rgba(0,0,0,0.08);
+        }
+        .protocol-chip.active {
+            background: var(--ios-accent);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.25);
+            transform: translateY(-2px);
+        }
 
-        .timer-container { position: relative; display: flex; flex-direction: column; align-items: center; margin: 10px 0 30px; }
-        .timer { font-size: 64px; font-weight: 200; font-variant-numeric: tabular-nums; letter-spacing: -2px; transition: transform 0.6s var(--ios-curve), color 0.4s ease; }
-        .timer.running { color: var(--ios-accent); transform: scale(1.05); }
+        .timer-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px 0 30px;
+        }
+        .timer { 
+            font-size: 64px; 
+            font-weight: 200; 
+            font-variant-numeric: tabular-nums; 
+            letter-spacing: -2px;
+            transition: transform 0.6s var(--ios-curve), color 0.4s ease;
+        }
+        .timer.running {
+            color: var(--ios-accent);
+            transform: scale(1.05);
+        }
 
         .action-btn {
-            background: var(--ios-accent); color: white; border: none; width: 80px; height: 80px; border-radius: 40px; font-size: 17px; font-weight: 600;
-            box-shadow: 0 6px 16px rgba(52, 199, 89, 0.3); transition: all 0.4s var(--ios-curve);
+            background: var(--ios-accent);
+            color: white;
+            border: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            font-size: 17px;
+            font-weight: 600;
+            box-shadow: 0 6px 16px rgba(52, 199, 89, 0.3);
+            transition: all 0.4s var(--ios-curve);
         }
-        .action-btn:active { transform: scale(0.88); }
-        .action-btn.stop { background: var(--ios-danger); box-shadow: 0 6px 16px rgba(255, 59, 48, 0.3); }
+        .action-btn:active { transform: scale(0.88); box-shadow: 0 2px 8px rgba(52, 199, 89, 0.2); }
+        .action-btn.stop { 
+            background: var(--ios-danger); 
+            box-shadow: 0 6px 16px rgba(255, 59, 48, 0.3); 
+        }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; margin-top: 28px; }
-        .stat-card { background: white; padding: 14px; border-radius: 20px; text-align: center; transition: transform 0.4s var(--ios-curve); }
+        /* 数据网格 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            margin-top: 28px;
+        }
+        .stat-card {
+            background: white;
+            padding: 14px;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.4s var(--ios-curve);
+        }
         .stat-card:active { transform: scale(0.94); }
-        .stat-val { font-size: 20px; font-weight: 700; color: var(--ios-accent); display: block; }
+        .stat-val { font-size: 20px; font-weight: 700; color: var(--ios-accent); display: block; transition: all 0.3s ease; }
         .stat-lab { font-size: 11px; color: var(--ios-secondary-label); margin-top: 4px; font-weight: 500; }
 
-        .tool-section { width: 100%; max-width: 400px; margin-top: 28px; }
+        /* 通用区块样式 */
+        .tool-section { width: 100%; margin-top: 28px; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 0 16px; }
-        .section-title { font-size: 13px; color: var(--ios-secondary-label); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin: 0; }
-        .expand-toggle { font-size: 13px; color: #007AFF; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-        .expand-toggle:active { opacity: 0.6; }
-
-        .tool-card { background: var(--ios-group-bg); border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-
-        .weight-input-container { display: flex; justify-content: space-between; align-items: center; }
-        .weight-input { border: none; background: #F2F2F7; padding: 10px 14px; border-radius: 12px; width: 100px; text-align: center; font-size: 17px; outline: none; font-weight: 600; }
+        .section-title { font-size: 13px; color: var(--ios-secondary-label); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+        .expand-btn { font-size: 13px; color: var(--ios-accent); font-weight: 600; background: none; border: none; padding: 0; cursor: pointer; }
         
-        .chart-expand-wrapper { 
-            height: 0; opacity: 0; overflow: hidden; 
+        .tool-card {
+            background: var(--ios-group-bg);
+            border-radius: 22px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            transition: transform 0.4s var(--ios-curve);
+        }
+        .tool-card:active { transform: scale(0.98); }
+
+        /* 体重记录 */
+        .weight-input-container { display: flex; justify-content: space-between; align-items: center; }
+        .weight-input { border: none; background: #F2F2F7; padding: 10px 14px; border-radius: 12px; width: 100px; text-align: center; font-size: 17px; outline: none; transition: background 0.3s; font-weight: 600; }
+        .weight-input:focus { background: #E5E5EA; }
+        
+        .chart-wrapper {
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
             transition: height 0.6s var(--ios-curve), opacity 0.4s var(--ios-curve);
         }
-        .chart-expand-wrapper.expanded { height: 260px; opacity: 1; }
-        .chart-container { background: white; border-radius: 18px; padding: 12px; margin-top: 12px; height: 220px; position: relative; }
-        .chart-controls { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
-        .zoom-btn { background: #F2F2F7; border: none; border-radius: 8px; padding: 6px 12px; font-size: 13px; color: var(--ios-secondary-label); font-weight: 600; }
+        .chart-wrapper.expanded {
+            height: 280px;
+            opacity: 1;
+        }
 
+        .chart-container { 
+            background: white; border-radius: 18px; padding: 12px; height: 220px; position: relative;
+        }
+        .chart-controls { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
+        .zoom-btn { background: #F2F2F7; border: none; border-radius: 8px; padding: 6px 12px; font-size: 13px; color: var(--ios-secondary-label); font-weight: 600; transition: all 0.2s; }
+        .zoom-btn:active { background: #E5E5EA; transform: scale(0.92); }
+
+        /* 历史记录 */
         .history-list { background: var(--ios-group-bg); border-radius: 22px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         .history-row-wrapper { 
             position: relative; overflow: hidden; background-color: var(--ios-danger); 
-            transition: max-height 0.5s var(--ios-curve), opacity 0.4s ease; max-height: 100px;
+            transition: max-height 0.5s var(--ios-curve), opacity 0.4s ease;
+            max-height: 100px;
         }
-        .history-row-wrapper.deleting { max-height: 0; opacity: 0; }
+        .history-row-wrapper.deleting { max-height: 0; opacity: 0; pointer-events: none; }
         .history-item { 
             background: var(--ios-group-bg); display: flex; justify-content: space-between; padding: 16px 20px; 
             position: relative; z-index: 2; transition: transform 0.5s var(--ios-curve); 
             border-bottom: 0.5px solid rgba(0,0,0,0.05);
         }
+        .history-item:last-child { border-bottom: none; }
         .delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: var(--ios-danger); color: white; display: flex; justify-content: center; align-items: center; z-index: 1; font-weight: 700; font-size: 15px; }
         .swiped .history-item { transform: translateX(-80px); }
     </style>
@@ -161,15 +291,15 @@
 
         <div class="tool-section">
             <div class="section-header">
-                <p class="section-title">体重曲线 (公斤)</p>
-                <span class="expand-toggle" id="chartToggle">展开图表</span>
+                <div class="section-title">体重记录 (公斤)</div>
+                <button class="expand-btn" id="toggleChartBtn">展开图表</button>
             </div>
             <div class="tool-card">
                 <div class="weight-input-container">
                     <span>记录今日体重</span>
                     <input type="number" step="0.1" class="weight-input" id="weightInput" placeholder="0.0">
                 </div>
-                <div class="chart-expand-wrapper" id="chartWrapper">
+                <div class="chart-wrapper" id="chartWrapper">
                     <div class="chart-container">
                         <canvas id="weightChart"></canvas>
                     </div>
@@ -182,7 +312,9 @@
         </div>
 
         <div class="tool-section">
-            <div class="section-header"><p class="section-title">历史记录</p></div>
+            <div class="section-header">
+                <div class="section-title">历史记录</div>
+            </div>
             <div class="history-list" id="historyList"></div>
         </div>
     </div>
@@ -199,8 +331,8 @@
         const mainWidget = document.getElementById('mainWidget');
         const weightInput = document.getElementById('weightInput');
         const historyList = document.getElementById('historyList');
-        const chartToggle = document.getElementById('chartToggle');
         const chartWrapper = document.getElementById('chartWrapper');
+        const toggleChartBtn = document.getElementById('toggleChartBtn');
 
         function haptic() { if ("vibrate" in navigator) navigator.vibrate(10); }
 
@@ -238,6 +370,7 @@
         function initChart() {
             const ctx = document.getElementById('weightChart').getContext('2d');
             const data = weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
             weightChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -247,27 +380,45 @@
                         data: data.map(d => d.val),
                         borderColor: '#34C759',
                         backgroundColor: 'rgba(52, 199, 89, 0.12)',
-                        borderWidth: 3, tension: 0.45, fill: true,
-                        pointBackgroundColor: '#34C759', pointBorderColor: 'white', pointBorderWidth: 2, pointRadius: 5
+                        borderWidth: 3,
+                        tension: 0.45,
+                        fill: true,
+                        pointBackgroundColor: '#34C759',
+                        pointBorderColor: 'white',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
                     }]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    },
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { display: true, grid: { color: 'rgba(0,0,0,0.03)' } },
-                        x: { display: true, grid: { display: false } }
+                        y: { display: true, grid: { color: 'rgba(0,0,0,0.03)' }, ticks: { font: { weight: '600' } } },
+                        x: { display: true, grid: { display: false }, ticks: { font: { weight: '500' } } }
                     }
                 }
             });
         }
 
-        chartToggle.onclick = () => {
+        function updateChart() {
+            if (!weightChart) return initChart();
+            const data = weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
+            weightChart.data.labels = data.map(d => d.date.split('-').slice(1).join('/'));
+            weightChart.data.datasets[0].data = data.map(d => d.val);
+            weightChart.update();
+        }
+
+        toggleChartBtn.onclick = () => {
             haptic();
-            const isExpanding = !chartWrapper.classList.contains('expanded');
-            chartWrapper.classList.toggle('expanded');
-            chartToggle.textContent = isExpanding ? "收起图表" : "展开图表";
-            if (isExpanding && !weightChart) {
+            const isExpanded = chartWrapper.classList.toggle('expanded');
+            toggleChartBtn.textContent = isExpanded ? '收起图表' : '展开图表';
+            if (isExpanded && !weightChart) {
                 setTimeout(initChart, 300);
             }
         };
@@ -275,8 +426,8 @@
         function zoomChart(factor) {
             haptic();
             const container = document.querySelector('.chart-container');
-            container.style.height = (container.clientHeight / factor) + 'px';
-            chartWrapper.style.height = (container.clientHeight + 40) + 'px';
+            const currentHeight = container.clientHeight;
+            container.style.height = (currentHeight / factor) + 'px';
         }
 
         weightInput.onchange = (e) => {
@@ -287,13 +438,10 @@
             if (existing) existing.val = val;
             else weightHistory.push({ date, val });
             localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
-            if (weightChart) {
-                const data = weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
-                weightChart.data.labels = data.map(d => d.date.split('-').slice(1).join('/'));
-                weightChart.data.datasets[0].data = data.map(d => d.val);
-                weightChart.update();
-            }
-            haptic(); e.target.value = ''; e.target.blur();
+            if (weightChart) updateChart();
+            haptic();
+            e.target.value = '';
+            e.target.blur();
         };
 
         function renderHistory() {
@@ -304,6 +452,7 @@
                 wrapper.className = 'history-row-wrapper';
                 wrapper.innerHTML = `<div class="delete-btn" onclick="deleteItem(${idx}, this)">删除</div>
                     <div class="history-item"><span>${new Date(item.end).toLocaleDateString('zh-CN')}</span><span>${item.duration}小时</span></div>`;
+                
                 const itemEl = wrapper.querySelector('.history-item');
                 let startX = 0;
                 itemEl.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
@@ -322,7 +471,8 @@
             setTimeout(() => {
                 history.splice(idx, 1); 
                 localStorage.setItem('fastHistory', JSON.stringify(history)); 
-                renderHistory(); renderStats(); 
+                renderHistory(); 
+                renderStats(); 
             }, 400);
         }
 
@@ -355,16 +505,17 @@
             };
         });
 
-        if (startTime) { interval = setInterval(updateDisplay, 1000); updateDisplay(); }
-        renderHistory(); renderStats();
-
+        // Service Worker 注册
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js?v=5').then(reg => {
                     console.log('SW registered');
-                }).catch(err => console.log('SW failed', err));
+                }).catch(err => console.log('SW error', err));
             });
         }
+
+        if (startTime) { interval = setInterval(updateDisplay, 1000); updateDisplay(); }
+        renderHistory(); renderStats();
     </script>
 </body>
 </html>
