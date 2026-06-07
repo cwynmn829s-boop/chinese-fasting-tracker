@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="断食计时器">
     <meta name="theme-color" content="#F2F2F7">
-    <link rel="apple-touch-icon" href="https://storage.googleapis.com/interaction-media-bucket/ceabf6b2-f221-4300-8d1b-a87901bca5f1/efbf9c40-3624-465e-ba44-1c6cfdca17f4?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=vercel%40theta-eon-430220-u6.iam.gserviceaccount.com%2F20260607%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20260607T175139Z&X-Goog-Expires=60&X-Goog-SignedHeaders=host&X-Goog-Signature=745b74e93061a35bd8a43890abdc7bb8188650a68a5baf0faae5d490c7b56094676e4feb8c502f8b267b74bb03e096d510da16c5993288bbeb268c38e6b3f391c714bd2dc3ec4fb3db721e804e653ea2ad3cd0e1858b9c15b8e96955bc641d195ae5baedf28af5a9d4ac6475a21dba4b34299cd3077c8382de0228c429f925341169cfb3328b34201a28451829945e99f7636622ab3e3ce58ccb6bdc3cfb05e6350a3c7e91ea556bbe7abcb5c2f69177d0e8c61e19f15ad80b82d0dea228d5a1f68b8c18ccbf95d684b362a95b57b42861c3dae9d6ace15a8b1dbbad15ea320aa5e674c43202998237e1d7817b9a6fe5117cd18708ea04e0a9e236e6e484a7a8">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png?v=4">
     <link rel="manifest" href="manifest.json">
     <title>断食计时器</title>
     <style>
@@ -17,8 +17,8 @@
             --ios-label: #000000;
             --ios-secondary-label: #8E8E93;
             --ios-separator: #C6C6C8;
-            --ios-accent: #34C759; /* Green Keynote */
-            --ios-danger: #FF3B30; /* Native iOS Delete Red */
+            --ios-accent: #34C759;
+            --ios-danger: #FF3B30;
             --glass: rgba(255, 255, 255, 0.7);
         }
 
@@ -38,23 +38,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden; /* Hide main scrollbar */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
-        .header {
-            width: 100%;
-            padding: 34px 4px 12px;
-            text-align: left;
-        }
+        body::-webkit-scrollbar { display: none; }
 
-        h1 {
-            font-size: 34px;
-            font-weight: 700;
-            margin: 0;
-            letter-spacing: -0.5px;
-        }
+        .header { width: 100%; padding: 34px 4px 12px; }
+        h1 { font-size: 34px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
 
-        /* Main Widget Card - iOS 26 Glassmorphic */
         .main-widget {
             background: var(--glass);
             backdrop-filter: blur(30px) saturate(180%);
@@ -63,37 +55,46 @@
             border-radius: 30px;
             width: 100%;
             max-width: 400px;
-            padding: 30px 20px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-top: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            animation: scaleIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .status-pill {
-            padding: 4px 14px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--ios-secondary-label);
+        .protocol-selector {
+            display: flex;
+            gap: 8px;
             margin-bottom: 20px;
-            transition: all 0.3s ease;
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+        .protocol-selector::-webkit-scrollbar { display: none; }
+        .protocol-chip {
+            padding: 6px 12px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 12px;
+            font-size: 13px;
+            white-space: nowrap;
+            color: var(--ios-secondary-label);
+        }
+        .protocol-chip.active {
+            background: var(--ios-accent);
+            color: white;
         }
 
-        .status-pill.active {
+        .stage-info {
+            font-size: 14px;
             color: var(--ios-accent);
-            background: rgba(52, 199, 89, 0.1);
+            font-weight: 600;
+            margin-bottom: 8px;
+            height: 20px;
         }
 
-        .timer {
-            font-size: 64px;
-            font-weight: 200;
-            font-variant-numeric: tabular-nums;
-            margin-bottom: 30px;
-            letter-spacing: -1.5px;
-        }
+        .timer { font-size: 56px; font-weight: 200; font-variant-numeric: tabular-nums; margin-bottom: 24px; letter-spacing: -1.5px; }
 
         .action-btn {
             background: var(--ios-accent);
@@ -104,179 +105,124 @@
             border-radius: 36px;
             font-size: 16px;
             font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, background-color 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2);
         }
+        .action-btn.stop { background: var(--ios-danger); box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2); }
 
-        .action-btn:active {
-            transform: scale(0.92);
-        }
-
-        .action-btn.stop {
-            background: var(--ios-danger);
-            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2);
-        }
-
-        /* Native iOS Grouped List Style */
-        .history-section {
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
             width: 100%;
-            max-width: 400px;
-            margin-top: 32px;
-            overflow: hidden;
+            margin-top: 24px;
         }
-
-        .history-header {
-            font-size: 13px;
-            font-weight: 400;
-            color: var(--ios-secondary-label);
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            padding-left: 16px;
+        .stat-card {
+            background: white;
+            padding: 12px;
+            border-radius: 16px;
+            text-align: center;
         }
+        .stat-val { font-size: 18px; font-weight: 700; color: var(--ios-accent); display: block; }
+        .stat-lab { font-size: 10px; color: var(--ios-secondary-label); margin-top: 4px; }
 
-        .history-list {
+        .tool-section { width: 100%; max-width: 400px; margin-top: 24px; }
+        .section-title { font-size: 13px; color: var(--ios-secondary-label); text-transform: uppercase; margin-bottom: 8px; padding-left: 16px; }
+        
+        .tool-card {
             background: var(--ios-group-bg);
             border-radius: 12px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            max-height: 300px;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE and Edge */
-        }
-
-        .history-list::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-        }
-
-        .history-row-wrapper {
-            position: relative;
-            overflow: hidden;
-            background-color: var(--ios-danger);
-        }
-
-        .history-item {
-            background: var(--ios-group-bg);
+            padding: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 16px;
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-            position: relative;
-            z-index: 2;
-            cursor: pointer;
+            margin-bottom: 12px;
         }
 
-        .history-item::after {
-            content: "";
-            position: absolute;
-            left: 16px;
-            right: 0;
-            bottom: 0;
-            height: 0.5px;
-            background-color: var(--ios-separator);
-        }
+        .water-controls { display: flex; align-items: center; gap: 12px; }
+        .water-btn { width: 32px; height: 32px; border-radius: 16px; border: none; background: #E5F6FF; color: #007AFF; font-size: 18px; }
+        
+        .weight-input { border: none; background: #F2F2F7; padding: 8px 12px; border-radius: 8px; width: 80px; text-align: center; font-size: 16px; outline: none; }
 
-        .history-row-wrapper:last-child .history-item::after {
-            display: none;
-        }
-
-        .delete-btn {
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 80px;
-            background-color: var(--ios-danger);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 15px;
-            font-weight: 500;
-            z-index: 1;
-        }
-
-        .history-date {
-            font-size: 17px;
-            font-weight: 400;
-        }
-
-        .history-duration {
-            font-size: 17px;
-            font-weight: 400;
-            color: var(--ios-secondary-label);
-        }
-
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Swipe State */
-        .swiped .history-item {
-            transform: translateX(-80px);
-        }
+        .history-list { background: var(--ios-group-bg); border-radius: 12px; overflow: hidden; }
+        .history-row-wrapper { position: relative; overflow: hidden; background-color: var(--ios-danger); }
+        .history-item { background: var(--ios-group-bg); display: flex; justify-content: space-between; padding: 14px 16px; position: relative; z-index: 2; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: var(--ios-danger); color: white; display: flex; justify-content: center; align-items: center; z-index: 1; }
+        .swiped .history-item { transform: translateX(-80px); }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>断食计时器</h1>
-    </div>
+    <div class="header"><h1>断食计时器</h1></div>
 
     <div class="main-widget">
-        <div id="status" class="status-pill">待机中</div>
+        <div class="protocol-selector" id="protocolList">
+            <div class="protocol-chip active" data-hours="16">16:8</div>
+            <div class="protocol-chip" data-hours="18">18:6</div>
+            <div class="protocol-chip" data-hours="20">20:4</div>
+            <div class="protocol-chip" data-hours="0">自定义</div>
+        </div>
+        <div id="stage" class="stage-info">血糖下降</div>
         <div id="timer" class="timer">00:00:00</div>
         <button id="toggleBtn" class="action-btn">开始</button>
-    </div>
 
-    <div class="history-section">
-        <div class="history-header">最近记录</div>
-        <div class="history-list" id="historyList">
-            <!-- Items -->
+        <div class="stats-grid">
+            <div class="stat-card"><span class="stat-val" id="statTotal">0</span><span class="stat-lab">总小时</span></div>
+            <div class="stat-card"><span class="stat-val" id="statStreak">0</span><span class="stat-lab">连续天数</span></div>
+            <div class="stat-card"><span class="stat-val" id="statRate">0%</span><span class="stat-lab">完成率</span></div>
         </div>
     </div>
 
-    <script>
-        // PWA update logic
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js?v=4').then(reg => {
-                    reg.onupdatefound = () => {
-                        const installingWorker = reg.installing;
-                        installingWorker.onstatechange = () => {
-                            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                window.location.reload();
-                            }
-                        };
-                    };
-                });
-            });
-        }
+    <div class="tool-section">
+        <div class="section-title">饮水追踪</div>
+        <div class="tool-card">
+            <span>今日饮水 (<span id="waterCount">0</span> 杯)</span>
+            <div class="water-controls">
+                <button class="water-btn" id="waterSub">-</button>
+                <button class="water-btn" id="waterAdd">+</button>
+            </div>
+        </div>
+    </div>
 
+    <div class="tool-section">
+        <div class="section-title">体重记录 (公斤)</div>
+        <div class="tool-card">
+            <span>当前体重</span>
+            <input type="number" step="0.1" class="weight-input" id="weightInput" placeholder="0.0">
+        </div>
+    </div>
+
+    <div class="tool-section">
+        <div class="section-title">最近记录</div>
+        <div class="history-list" id="historyList"></div>
+    </div>
+
+    <script>
         let startTime = localStorage.getItem('fastStartTime');
         let history = JSON.parse(localStorage.getItem('fastHistory') || '[]');
-        const timerDisplay = document.getElementById('timer');
-        const statusDisplay = document.getElementById('status');
-        const toggleBtn = document.getElementById('toggleBtn');
-        const historyList = document.getElementById('historyList');
+        let water = parseInt(localStorage.getItem('waterCount') || '0');
+        let weight = localStorage.getItem('lastWeight') || '';
+        let protocol = parseInt(localStorage.getItem('fastProtocol') || '16');
         let interval;
 
-        function haptic() {
-            if ("vibrate" in navigator) {
-                navigator.vibrate(15);
-            }
+        const timerDisplay = document.getElementById('timer');
+        const stageDisplay = document.getElementById('stage');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const waterCount = document.getElementById('waterCount');
+        const weightInput = document.getElementById('weightInput');
+        const historyList = document.getElementById('historyList');
+
+        function haptic() { if ("vibrate" in navigator) navigator.vibrate(10); }
+
+        function getStage(hours) {
+            if (hours < 12) return "血糖下降 / 胰岛素降低";
+            if (hours < 18) return "脂肪燃烧 / 酮体产生";
+            if (hours < 24) return "细胞自噬 / 深层修复";
+            return "生长激素分泌 / 免疫重塑";
         }
 
         function updateDisplay() {
             if (!startTime) {
                 timerDisplay.textContent = "00:00:00";
-                statusDisplay.textContent = "待机中";
-                statusDisplay.classList.remove('active');
+                stageDisplay.textContent = "准备开始";
                 toggleBtn.textContent = "开始";
                 toggleBtn.classList.remove('stop');
                 clearInterval(interval);
@@ -290,73 +236,46 @@
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
             timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            statusDisplay.textContent = "断食中";
-            statusDisplay.classList.add('active');
+            stageDisplay.textContent = getStage(hours);
             toggleBtn.textContent = "结束";
             toggleBtn.classList.add('stop');
         }
 
-        function deleteItem(index) {
-            haptic();
-            history.splice(index, 1);
-            localStorage.setItem('fastHistory', JSON.stringify(history));
-            renderHistory();
+        function renderStats() {
+            const totalHours = history.reduce((acc, item) => acc + parseFloat(item.duration || 0), 0).toFixed(1);
+            document.getElementById('statTotal').textContent = totalHours;
+            document.getElementById('statStreak').textContent = history.length > 0 ? "1" : "0"; // Simplified streak logic
+            const rate = protocol > 0 ? (history.filter(h => parseFloat(h.duration) >= protocol).length / (history.length || 1) * 100).toFixed(0) : 100;
+            document.getElementById('statRate').textContent = rate + "%";
         }
 
         function renderHistory() {
-            if (history.length === 0) {
-                historyList.innerHTML = '<div class="history-item"><span class="history-date" style="color: #8e8e93">暂无记录</span></div>';
-                return;
-            }
-            
-            historyList.innerHTML = '';
+            historyList.innerHTML = history.length ? '' : '<div class="history-item" style="color:#8e8e93">暂无记录</div>';
             history.slice().reverse().forEach((item, revIdx) => {
                 const idx = history.length - 1 - revIdx;
                 const wrapper = document.createElement('div');
                 wrapper.className = 'history-row-wrapper';
-                wrapper.innerHTML = `
-                    <div class="delete-btn" onclick="deleteItem(${idx})">删除</div>
-                    <div class="history-item" id="item-${idx}">
-                        <span class="history-date">${new Date(item.end).toLocaleDateString('zh-CN', {month: 'short', day: 'numeric'})}</span>
-                        <span class="history-duration">${item.duration}</span>
-                    </div>
-                `;
+                wrapper.innerHTML = `<div class="delete-btn" onclick="deleteItem(${idx})">删除</div>
+                    <div class="history-item"><span>${new Date(item.end).toLocaleDateString('zh-CN')}</span><span>${item.duration}小时</span></div>`;
                 
                 const itemEl = wrapper.querySelector('.history-item');
                 let startX = 0;
-                let currentX = 0;
-
-                itemEl.addEventListener('touchstart', (e) => {
-                    startX = e.touches[0].clientX;
-                }, {passive: true});
-
-                itemEl.addEventListener('touchmove', (e) => {
-                    currentX = e.touches[0].clientX;
-                    const diff = startX - currentX;
-                    if (diff > 0 && diff < 100) {
-                        itemEl.style.transform = `translateX(-${diff}px)`;
-                    }
-                }, {passive: true});
-
+                itemEl.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
                 itemEl.addEventListener('touchend', (e) => {
-                    const diff = startX - currentX;
-                    if (diff > 40) {
-                        wrapper.classList.add('swiped');
-                        itemEl.style.transform = `translateX(-80px)`;
-                    } else {
-                        wrapper.classList.remove('swiped');
-                        itemEl.style.transform = `translateX(0)`;
-                    }
+                    if (startX - e.changedTouches[0].clientX > 50) wrapper.classList.add('swiped');
+                    else wrapper.classList.remove('swiped');
                 });
-
                 historyList.appendChild(wrapper);
             });
         }
 
+        function deleteItem(idx) { haptic(); history.splice(idx, 1); localStorage.setItem('fastHistory', JSON.stringify(history)); renderHistory(); renderStats(); }
+
         toggleBtn.onclick = () => {
             haptic();
             if (startTime) {
-                const duration = timerDisplay.textContent;
+                const diff = new Date().getTime() - parseInt(startTime);
+                const duration = (diff / (1000 * 60 * 60)).toFixed(1);
                 history.push({ end: new Date().getTime(), duration });
                 localStorage.setItem('fastHistory', JSON.stringify(history));
                 localStorage.removeItem('fastStartTime');
@@ -366,15 +285,30 @@
                 localStorage.setItem('fastStartTime', startTime);
                 interval = setInterval(updateDisplay, 1000);
             }
-            updateDisplay();
-            renderHistory();
+            updateDisplay(); renderHistory(); renderStats();
         };
 
-        if (startTime) {
-            interval = setInterval(updateDisplay, 1000);
-            updateDisplay();
-        }
-        renderHistory();
+        document.getElementById('waterAdd').onclick = () => { haptic(); water++; updateWater(); };
+        document.getElementById('waterSub').onclick = () => { haptic(); if(water>0) water--; updateWater(); };
+        function updateWater() { waterCount.textContent = water; localStorage.setItem('waterCount', water); }
+
+        weightInput.value = weight;
+        weightInput.onchange = (e) => { weight = e.target.value; localStorage.setItem('lastWeight', weight); haptic(); };
+
+        document.querySelectorAll('.protocol-chip').forEach(chip => {
+            if(parseInt(chip.dataset.hours) === protocol) chip.classList.add('active');
+            chip.onclick = () => {
+                haptic();
+                document.querySelectorAll('.protocol-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                protocol = parseInt(chip.dataset.hours);
+                localStorage.setItem('fastProtocol', protocol);
+                renderStats();
+            };
+        });
+
+        if (startTime) { interval = setInterval(updateDisplay, 1000); updateDisplay(); }
+        updateWater(); renderHistory(); renderStats();
     </script>
 </body>
 </html>
