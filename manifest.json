@@ -1,7 +1,7 @@
 {
   "name": "断食计时器",
   "short_name": "断食计时",
-  "start_url": "/?source=pwa",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
