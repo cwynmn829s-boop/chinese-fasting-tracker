@@ -10,6 +10,8 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png?v=4">
     <link rel="manifest" href="manifest.json">
     <title>断食计时器</title>
+    <!-- 引入 Chart.js 用于体重曲线图 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --ios-bg: #F2F2F7;
@@ -40,6 +42,7 @@
             align-items: center;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            overflow-x: hidden;
         }
 
         body::-webkit-scrollbar { display: none; }
@@ -47,6 +50,7 @@
         .header { width: 100%; padding: 34px 4px 12px; }
         h1 { font-size: 34px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
 
+        /* 主计时组件 */
         .main-widget {
             background: var(--glass);
             backdrop-filter: blur(30px) saturate(180%);
@@ -63,35 +67,26 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.03);
         }
 
+        /* 断食方案选择 */
         .protocol-selector {
             display: flex;
             gap: 8px;
             margin-bottom: 20px;
             width: 100%;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
+            justify-content: center;
         }
-        .protocol-selector::-webkit-scrollbar { display: none; }
         .protocol-chip {
-            padding: 6px 12px;
+            padding: 8px 16px;
             background: rgba(0,0,0,0.05);
             border-radius: 12px;
-            font-size: 13px;
-            white-space: nowrap;
+            font-size: 14px;
             color: var(--ios-secondary-label);
+            transition: all 0.3s;
         }
         .protocol-chip.active {
             background: var(--ios-accent);
             color: white;
-        }
-
-        .stage-info {
-            font-size: 14px;
-            color: var(--ios-accent);
             font-weight: 600;
-            margin-bottom: 8px;
-            height: 20px;
         }
 
         .timer { font-size: 56px; font-weight: 200; font-variant-numeric: tabular-nums; margin-bottom: 24px; letter-spacing: -1.5px; }
@@ -106,9 +101,12 @@
             font-size: 16px;
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(52, 199, 89, 0.2);
+            transition: transform 0.1s;
         }
+        .action-btn:active { transform: scale(0.95); }
         .action-btn.stop { background: var(--ios-danger); box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2); }
 
+        /* 数据网格 */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -125,6 +123,7 @@
         .stat-val { font-size: 18px; font-weight: 700; color: var(--ios-accent); display: block; }
         .stat-lab { font-size: 10px; color: var(--ios-secondary-label); margin-top: 4px; }
 
+        /* 通用区块样式 */
         .tool-section { width: 100%; max-width: 400px; margin-top: 24px; }
         .section-title { font-size: 13px; color: var(--ios-secondary-label); text-transform: uppercase; margin-bottom: 8px; padding-left: 16px; }
         
@@ -133,20 +132,37 @@
             border-radius: 12px;
             padding: 16px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 12px;
             margin-bottom: 12px;
         }
 
-        .water-controls { display: flex; align-items: center; gap: 12px; }
-        .water-btn { width: 32px; height: 32px; border-radius: 16px; border: none; background: #E5F6FF; color: #007AFF; font-size: 18px; }
-        
-        .weight-input { border: none; background: #F2F2F7; padding: 8px 12px; border-radius: 8px; width: 80px; text-align: center; font-size: 16px; outline: none; }
+        /* 饮水追踪 */
+        .water-header { display: flex; justify-content: space-between; align-items: center; }
+        .water-controls { display: flex; align-items: center; justify-content: center; gap: 16px; width: 100%; padding: 8px 0; }
+        .water-btn { width: 44px; height: 44px; border-radius: 22px; border: none; background: #E5F6FF; color: #007AFF; font-size: 24px; font-weight: 600; }
+        .water-display { font-size: 16px; font-weight: 600; min-width: 120px; text-align: center; color: #007AFF; }
+        .cup-selector { 
+            border: none; background: #F2F2F7; padding: 6px 10px; border-radius: 8px; font-size: 14px; outline: none; 
+            color: var(--ios-label);
+        }
 
+        /* 体重记录 */
+        .weight-input-container { display: flex; justify-content: space-between; align-items: center; }
+        .weight-input { border: none; background: #F2F2F7; padding: 8px 12px; border-radius: 8px; width: 100px; text-align: center; font-size: 16px; outline: none; }
+        .chart-container { 
+            background: white; border-radius: 12px; padding: 12px; margin-top: 12px; height: 200px; position: relative;
+            overflow: hidden;
+        }
+        .chart-controls { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+        .zoom-btn { background: #F2F2F7; border: none; border-radius: 6px; padding: 4px 8px; font-size: 12px; color: var(--ios-secondary-label); }
+
+        /* 历史记录 */
         .history-list { background: var(--ios-group-bg); border-radius: 12px; overflow: hidden; }
         .history-row-wrapper { position: relative; overflow: hidden; background-color: var(--ios-danger); }
-        .history-item { background: var(--ios-group-bg); display: flex; justify-content: space-between; padding: 14px 16px; position: relative; z-index: 2; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: var(--ios-danger); color: white; display: flex; justify-content: center; align-items: center; z-index: 1; }
+        .history-item { background: var(--ios-group-bg); display: flex; justify-content: space-between; padding: 14px 16px; position: relative; z-index: 2; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); border-bottom: 0.5px solid var(--ios-separator); }
+        .history-item:last-child { border-bottom: none; }
+        .delete-btn { position: absolute; right: 0; top: 0; bottom: 0; width: 80px; background: var(--ios-danger); color: white; display: flex; justify-content: center; align-items: center; z-index: 1; font-weight: 600; }
         .swiped .history-item { transform: translateX(-80px); }
     </style>
 </head>
@@ -154,13 +170,12 @@
     <div class="header"><h1>断食计时器</h1></div>
 
     <div class="main-widget">
+        <!-- 方案选择：20:4 排首位 -->
         <div class="protocol-selector" id="protocolList">
-            <div class="protocol-chip active" data-hours="16">16:8</div>
-            <div class="protocol-chip" data-hours="18">18:6</div>
             <div class="protocol-chip" data-hours="20">20:4</div>
-            <div class="protocol-chip" data-hours="0">自定义</div>
+            <div class="protocol-chip" data-hours="16">16:8</div>
+            <div class="protocol-chip" data-hours="18">18:6</div>
         </div>
-        <div id="stage" class="stage-info">血糖下降</div>
         <div id="timer" class="timer">00:00:00</div>
         <button id="toggleBtn" class="action-btn">开始</button>
 
@@ -171,86 +186,184 @@
         </div>
     </div>
 
+    <!-- 饮水追踪：带容量设置和居中显示 -->
     <div class="tool-section">
         <div class="section-title">饮水追踪</div>
         <div class="tool-card">
-            <span>今日饮水 (<span id="waterCount">0</span> 杯)</span>
+            <div class="water-header">
+                <span>杯容量设置</span>
+                <select class="cup-selector" id="cupSizeSelect">
+                    <option value="100">100ml</option>
+                    <option value="200">200ml</option>
+                    <option value="250" selected>250ml</option>
+                    <option value="300">300ml</option>
+                    <option value="400">400ml</option>
+                    <option value="500">500ml</option>
+                </select>
+            </div>
             <div class="water-controls">
-                <button class="water-btn" id="waterSub">-</button>
+                <button class="water-btn" id="waterSub">−</button>
+                <div class="water-display" id="waterDisplay">0ml / 0杯</div>
                 <button class="water-btn" id="waterAdd">+</button>
             </div>
         </div>
     </div>
 
+    <!-- 体重记录：曲线图 -->
     <div class="tool-section">
-        <div class="section-title">体重记录 (公斤)</div>
+        <div class="section-title">体重曲线 (公斤)</div>
         <div class="tool-card">
-            <span>当前体重</span>
-            <input type="number" step="0.1" class="weight-input" id="weightInput" placeholder="0.0">
+            <div class="weight-input-container">
+                <span>记录今日体重</span>
+                <input type="number" step="0.1" class="weight-input" id="weightInput" placeholder="0.0">
+            </div>
+            <div class="chart-container">
+                <canvas id="weightChart"></canvas>
+            </div>
+            <div class="chart-controls">
+                <button class="zoom-btn" onclick="zoomChart(0.8)">放大</button>
+                <button class="zoom-btn" onclick="zoomChart(1.2)">缩小</button>
+            </div>
         </div>
     </div>
 
     <div class="tool-section">
-        <div class="section-title">最近记录</div>
+        <div class="section-title">历史记录</div>
         <div class="history-list" id="historyList"></div>
     </div>
 
     <script>
+        // 核心数据初始化
         let startTime = localStorage.getItem('fastStartTime');
         let history = JSON.parse(localStorage.getItem('fastHistory') || '[]');
-        let water = parseInt(localStorage.getItem('waterCount') || '0');
-        let weight = localStorage.getItem('lastWeight') || '';
-        let protocol = parseInt(localStorage.getItem('fastProtocol') || '16');
+        let waterTotal = parseInt(localStorage.getItem('waterTotal') || '0');
+        let cupSize = parseInt(localStorage.getItem('cupSize') || '250');
+        let weightHistory = JSON.parse(localStorage.getItem('weightHistory') || '[]');
+        let protocol = parseInt(localStorage.getItem('fastProtocol') || '20');
         let interval;
 
         const timerDisplay = document.getElementById('timer');
-        const stageDisplay = document.getElementById('stage');
         const toggleBtn = document.getElementById('toggleBtn');
-        const waterCount = document.getElementById('waterCount');
+        const waterDisplay = document.getElementById('waterDisplay');
+        const cupSizeSelect = document.getElementById('cupSizeSelect');
         const weightInput = document.getElementById('weightInput');
         const historyList = document.getElementById('historyList');
 
         function haptic() { if ("vibrate" in navigator) navigator.vibrate(10); }
 
-        function getStage(hours) {
-            if (hours < 12) return "血糖下降 / 胰岛素降低";
-            if (hours < 18) return "脂肪燃烧 / 酮体产生";
-            if (hours < 24) return "细胞自噬 / 深层修复";
-            return "生长激素分泌 / 免疫重塑";
-        }
-
+        // 计时逻辑
         function updateDisplay() {
             if (!startTime) {
                 timerDisplay.textContent = "00:00:00";
-                stageDisplay.textContent = "准备开始";
                 toggleBtn.textContent = "开始";
                 toggleBtn.classList.remove('stop');
                 clearInterval(interval);
                 return;
             }
-
             const now = new Date().getTime();
             const diff = now - parseInt(startTime);
             const hours = Math.floor(diff / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
             timerDisplay.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            stageDisplay.textContent = getStage(hours);
             toggleBtn.textContent = "结束";
             toggleBtn.classList.add('stop');
         }
 
+        // 数据统计
         function renderStats() {
             const totalHours = history.reduce((acc, item) => acc + parseFloat(item.duration || 0), 0).toFixed(1);
             document.getElementById('statTotal').textContent = totalHours;
-            document.getElementById('statStreak').textContent = history.length > 0 ? "1" : "0"; // Simplified streak logic
-            const rate = protocol > 0 ? (history.filter(h => parseFloat(h.duration) >= protocol).length / (history.length || 1) * 100).toFixed(0) : 100;
+            document.getElementById('statStreak').textContent = history.length > 0 ? "1" : "0";
+            const rate = (history.filter(h => parseFloat(h.duration) >= protocol).length / (history.length || 1) * 100).toFixed(0);
             document.getElementById('statRate').textContent = rate + "%";
         }
 
+        // 饮水逻辑
+        cupSizeSelect.value = cupSize;
+        cupSizeSelect.onchange = (e) => {
+            cupSize = parseInt(e.target.value);
+            localStorage.setItem('cupSize', cupSize);
+            updateWaterUI();
+        };
+
+        document.getElementById('waterAdd').onclick = () => { haptic(); waterTotal += cupSize; updateWater(); };
+        document.getElementById('waterSub').onclick = () => { haptic(); if(waterTotal >= cupSize) waterTotal -= cupSize; updateWater(); };
+        
+        function updateWater() { 
+            localStorage.setItem('waterTotal', waterTotal); 
+            updateWaterUI(); 
+        }
+
+        function updateWaterUI() {
+            const cups = (waterTotal / cupSize).toFixed(1).replace('.0', '');
+            waterDisplay.textContent = `${waterTotal}ml / ${cups}杯`;
+        }
+
+        // 体重图表逻辑
+        let weightChart;
+        function initChart() {
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            const data = weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            weightChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => d.date.split('-').slice(1).join('/')),
+                    datasets: [{
+                        label: '体重',
+                        data: data.map(d => d.val),
+                        borderColor: '#34C759',
+                        backgroundColor: 'rgba(52, 199, 89, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#34C759',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { display: true, grid: { display: false } },
+                        x: { display: true, grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function updateChart() {
+            if (!weightChart) return initChart();
+            const data = weightHistory.sort((a, b) => new Date(a.date) - new Date(b.date));
+            weightChart.data.labels = data.map(d => d.date.split('-').slice(1).join('/'));
+            weightChart.data.datasets[0].data = data.map(d => d.val);
+            weightChart.update();
+        }
+
+        function zoomChart(factor) {
+            const container = document.querySelector('.chart-container');
+            const currentHeight = container.clientHeight;
+            container.style.height = (currentHeight / factor) + 'px';
+        }
+
+        weightInput.onchange = (e) => {
+            const val = parseFloat(e.target.value);
+            if (!val) return;
+            const date = new Date().toISOString().split('T')[0];
+            const existing = weightHistory.find(w => w.date === date);
+            if (existing) existing.val = val;
+            else weightHistory.push({ date, val });
+            localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
+            updateChart();
+            haptic();
+            e.target.value = '';
+        };
+
+        // 历史记录
         function renderHistory() {
-            historyList.innerHTML = history.length ? '' : '<div class="history-item" style="color:#8e8e93">暂无记录</div>';
+            historyList.innerHTML = history.length ? '' : '<div class="history-item" style="color:#8e8e93; justify-content:center">暂无记录</div>';
             history.slice().reverse().forEach((item, revIdx) => {
                 const idx = history.length - 1 - revIdx;
                 const wrapper = document.createElement('div');
@@ -288,13 +401,7 @@
             updateDisplay(); renderHistory(); renderStats();
         };
 
-        document.getElementById('waterAdd').onclick = () => { haptic(); water++; updateWater(); };
-        document.getElementById('waterSub').onclick = () => { haptic(); if(water>0) water--; updateWater(); };
-        function updateWater() { waterCount.textContent = water; localStorage.setItem('waterCount', water); }
-
-        weightInput.value = weight;
-        weightInput.onchange = (e) => { weight = e.target.value; localStorage.setItem('lastWeight', weight); haptic(); };
-
+        // 方案切换
         document.querySelectorAll('.protocol-chip').forEach(chip => {
             if(parseInt(chip.dataset.hours) === protocol) chip.classList.add('active');
             chip.onclick = () => {
@@ -307,8 +414,9 @@
             };
         });
 
+        // 初始化
         if (startTime) { interval = setInterval(updateDisplay, 1000); updateDisplay(); }
-        updateWater(); renderHistory(); renderStats();
+        updateWaterUI(); renderHistory(); renderStats(); initChart();
     </script>
 </body>
 </html>
