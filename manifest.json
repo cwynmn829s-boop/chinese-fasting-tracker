@@ -1,23 +1,17 @@
 {
-  "name": "翡翠断食",
-  "short_name": "翡翠断食",
-  "start_url": "index.html",
+  "name": "Chinese Fasting Tracker",
+  "short_name": "断食追踪",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#022c22",
-  "theme_color": "#064e3b",
-  "orientation": "any",
+  "background_color": "#0A0F0D",
+  "theme_color": "#0A0F0D",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "https://img.icons8.com/glassmorphism/512/emerald.png",
+      "src": "https://api.dicebear.com/7.x/shapes/svg?seed=Emerald&backgroundColor=0A0F0D&shapeColor=10B981",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://img.icons8.com/glassmorphism/512/emerald.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
