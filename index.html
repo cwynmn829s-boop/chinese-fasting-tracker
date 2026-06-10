@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>断食追踪器 - Emerald Pro</title>
-    <link rel="manifest" href="manifest.json?v=600">
+    <title>断食追踪器 - Ice Blue Pro</title>
+    <link rel="manifest" href="manifest.json?v=601">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#ffffff">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --emerald-primary: #10b981;
-            --emerald-secondary: #059669;
-            --emerald-bg: #f0fdf4;
-            --glass-bg: rgba(255, 255, 255, 0.75);
+            --primary: #007aff;
+            --primary-glow: rgba(0, 122, 255, 0.5);
+            --secondary: #1c1c1e;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
             --glass-border: rgba(255, 255, 255, 0.4);
-            --text-main: #064e3b;
-            --text-dim: #065f46;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            --text-main: #1c1c1e;
+            --text-dim: #3a3a3c;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
             --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             --spring: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -35,7 +36,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+            background: var(--bg-gradient);
             color: var(--text-main);
         }
 
@@ -50,7 +51,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Nav Tabs */
         #nav-tabs {
             position: fixed;
             bottom: 24px;
@@ -75,7 +75,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            opacity: 0.5;
+            opacity: 0.4;
             transition: var(--transition);
             cursor: pointer;
         }
@@ -88,18 +88,18 @@
         .tab-item svg {
             width: 24px;
             height: 24px;
-            stroke: var(--emerald-primary);
-            stroke-width: 1.5;
+            stroke: var(--primary);
+            stroke-width: 2;
             fill: none;
         }
 
         .tab-item span {
             font-size: 10px;
             margin-top: 4px;
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--secondary);
         }
 
-        /* Content Sections */
         .section {
             display: none;
             padding: 60px 20px 120px;
@@ -114,7 +114,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Dashboard */
         .timer-container {
             display: flex;
             flex-direction: column;
@@ -122,38 +121,51 @@
             margin-top: 20px;
         }
 
-        .timer-ring {
+        .timer-ring-wrapper {
             position: relative;
-            width: 280px;
-            height: 280px;
-            background: var(--glass-bg);
-            border-radius: 50%;
+            width: 300px;
+            height: 300px;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+        }
+
+        .timer-ring-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--glass-bg);
+            border-radius: 50%;
             box-shadow: var(--shadow);
             border: 1px solid var(--glass-border);
         }
 
-        .timer-ring svg.progress-ring {
+        /* Fluid Ring Styles */
+        .fluid-ring {
             position: absolute;
-            top: 0;
-            left: 0;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            overflow: hidden;
             transform: rotate(-90deg);
         }
 
         .timer-time {
+            position: relative;
             font-size: 48px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            color: var(--emerald-primary);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: var(--secondary);
+            z-index: 2;
         }
 
         .timer-label {
+            position: relative;
             font-size: 14px;
             color: var(--text-dim);
             margin-top: 4px;
+            z-index: 2;
+            font-weight: 500;
         }
 
         .timer-controls {
@@ -163,7 +175,7 @@
         }
 
         .btn {
-            padding: 14px 40px;
+            padding: 14px 36px;
             border-radius: 20px;
             border: none;
             font-size: 16px;
@@ -175,10 +187,9 @@
 
         .btn:active { transform: scale(0.92); }
 
-        .btn-primary { background: var(--emerald-primary); color: #fff; }
-        .btn-secondary { background: var(--glass-bg); backdrop-filter: blur(10px); color: var(--emerald-primary); border: 1px solid var(--glass-border); }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-secondary { background: var(--glass-bg); backdrop-filter: blur(10px); color: var(--primary); border: 1px solid var(--glass-border); }
 
-        /* Bento Grid */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -188,41 +199,21 @@
 
         .bento-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             padding: 20px;
-            border-radius: 24px;
+            border-radius: 28px;
             box-shadow: var(--shadow);
         }
 
         .full-width { grid-column: span 2; }
 
-        /* Tablet Layout (7:5) */
-        @media (min-width: 768px) and (orientation: landscape) {
-            #app-wrapper {
-                flex-direction: row;
-            }
-            .section {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding-top: 40px;
-            }
-            .dashboard-main {
-                display: grid;
-                grid-template-columns: 1fr 1.2fr;
-                gap: 40px;
-                align-items: start;
-            }
-            .timer-container { margin-top: 0; }
-        }
-
-        /* Modals & Drawers */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.2);
-            backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(8px);
             z-index: 2000;
             display: none;
             justify-content: center;
@@ -230,9 +221,9 @@
         }
 
         .modal-content {
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             width: 100%;
             max-width: 500px;
             padding: 32px;
@@ -245,7 +236,6 @@
         .modal.active { display: flex; }
         .modal.active .modal-content { transform: translateY(0); }
 
-        /* Grid */
         .grid-circles {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -256,52 +246,67 @@
             width: 100%;
             padding-bottom: 100%;
             border-radius: 50%;
-            background: var(--emerald-bg);
+            background: rgba(0, 122, 255, 0.1);
+            transition: var(--transition);
         }
-        .circle.active { background: var(--emerald-primary); box-shadow: 0 0 10px var(--emerald-primary); }
+        .circle.active { background: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
 
-        h2, h3 { margin-top: 0; font-weight: 700; letter-spacing: -0.5px; color: var(--text-main); }
+        h2, h3 { margin-top: 0; font-weight: 800; letter-spacing: -0.5px; color: var(--secondary); }
+
+        /* Chart glow style */
+        .chart-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 10px;
+            margin-top: 16px;
+        }
     </style>
 </head>
 <body>
     <div id="app-wrapper">
-        <!-- Dashboard Section -->
         <section id="dashboard" class="section active">
             <div class="dashboard-main">
                 <div class="timer-container">
                     <h2>当前状态</h2>
-                    <div class="timer-ring">
-                        <svg class="progress-ring" width="280" height="280">
-                            <circle stroke="#f0fdf4" stroke-width="12" fill="transparent" r="130" cx="140" cy="140"/>
-                            <circle id="timer-progress" stroke="#10b981" stroke-width="12" stroke-linecap="round" fill="transparent" r="130" cx="140" cy="140" stroke-dasharray="816.8" stroke-dashoffset="816.8"/>
+                    <div class="timer-ring-wrapper">
+                        <div class="timer-ring-bg"></div>
+                        <svg class="progress-ring" width="300" height="300" style="position:absolute; transform:rotate(-90deg); z-index:1;">
+                            <circle stroke="rgba(0,122,255,0.1)" stroke-width="12" fill="transparent" r="135" cx="150" cy="150"/>
+                            <circle id="timer-progress" stroke="url(#timer-gradient)" stroke-width="12" stroke-linecap="round" fill="transparent" r="135" cx="150" cy="150" stroke-dasharray="848.2" stroke-dashoffset="848.2" style="filter: drop-shadow(0 0 8px var(--primary-glow));"/>
+                            <defs>
+                                <linearGradient id="timer-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#007aff" />
+                                    <stop offset="100%" stop-color="#5856d6" />
+                                </linearGradient>
+                            </defs>
                         </svg>
                         <div class="timer-time" id="display-time">16:00:00</div>
-                        <div class="timer-label" id="timer-status">正在准备</div>
+                        <div class="timer-label" id="timer-status">准备开始</div>
                     </div>
                     <div class="timer-controls">
-                        <button class="btn btn-primary" onclick="toggleTimer()" id="main-btn">启动</button>
-                        <button class="btn btn-secondary" onclick="openPlanPicker()">更换计划</button>
+                        <button class="btn btn-primary" onclick="toggleTimer()" id="main-btn">开始断食</button>
+                        <button class="btn btn-secondary" onclick="openPlanPicker()">调整计划</button>
                     </div>
                 </div>
 
                 <div class="bento-grid">
                     <div class="bento-card full-width">
                         <h3>生理阶段</h3>
-                        <p id="bio-stage" style="color:var(--text-dim); margin:0;">断食初期：身体开始消耗糖原，胰岛素水平逐渐下降。</p>
+                        <p id="bio-stage" style="color:var(--text-dim); margin:0; font-size:15px; line-height:1.5;">断食准备中：建议在开始前摄入充足的水分。</p>
                     </div>
                     <div class="bento-card">
-                        <h3>目标</h3>
-                        <span id="target-plan">16:8</span>
+                        <h3>当前计划</h3>
+                        <span id="target-plan" style="font-weight:700; color:var(--primary);">16:8</span>
                     </div>
                     <div class="bento-card">
-                        <h3>已坚持</h3>
-                        <span>4 天</span>
+                        <h3>连续达标</h3>
+                        <span id="streak-count" style="font-weight:700; color:var(--primary);">0 天</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Journey Section -->
         <section id="journey" class="section">
             <h2>健康旅程</h2>
             <div class="bento-grid">
@@ -310,59 +315,63 @@
                         <h3>体重趋势</h3>
                         <button class="btn btn-secondary" style="padding:8px 16px; font-size:14px;" onclick="openWeightModal()">记录</button>
                     </div>
-                    <canvas id="weightChart" style="width:100%; height:200px; margin-top:16px;"></canvas>
+                    <div class="chart-container">
+                        <canvas id="weightChart" style="width:100%; height:220px;"></canvas>
+                    </div>
                 </div>
                 <div class="bento-card full-width">
                     <h3>身体变化里程碑</h3>
-                    <div style="margin-top:12px; font-size:14px;">
-                        <div style="margin-bottom:8px;">✅ 12h - 开始产生酮体</div>
-                        <div style="margin-bottom:8px;">⏳ 18h - 脂肪氧化峰值</div>
-                        <div>⏳ 24h - 细胞自噬开始</div>
+                    <div style="margin-top:12px; font-size:14px; color:var(--text-dim);">
+                        <div style="margin-bottom:12px; display:flex; align-items:center;">
+                            <span style="width:8px; height:8px; background:var(--primary); border-radius:50%; margin-right:10px;"></span>
+                            12h - 酮体生成中
+                        </div>
+                        <div style="margin-bottom:12px; display:flex; align-items:center;">
+                            <span style="width:8px; height:8px; background:#ccc; border-radius:50%; margin-right:10px;"></span>
+                            18h - 脂肪代谢高峰
+                        </div>
+                        <div style="display:flex; align-items:center;">
+                            <span style="width:8px; height:8px; background:#ccc; border-radius:50%; margin-right:10px;"></span>
+                            24h - 细胞自噬启动
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Library Section -->
         <section id="library" class="section">
             <h2>百科全书</h2>
             <div class="bento-grid">
                 <div class="bento-card full-width">
                     <h4 style="margin:0 0 8px;">什么是 16:8 断食？</h4>
-                    <p style="margin:0; font-size:14px; opacity:0.8;">最受欢迎的断食方法，8小时进食，16小时禁食...</p>
+                    <p style="margin:0; font-size:14px; opacity:0.8;">最受欢迎的断食方法，8小时进食，16小时禁食。适合大多数初学者，能有效改善代谢健康。</p>
                 </div>
                 <div class="bento-card">
                     <h4 style="margin:0 0 8px;">补水指南</h4>
-                    <p style="margin:0; font-size:14px; opacity:0.8;">黑咖啡与茶是否打破断食？</p>
+                    <p style="margin:0; font-size:14px; opacity:0.8;">黑咖啡、纯茶、苏打水均不影响断食效果。</p>
                 </div>
                 <div class="bento-card">
-                    <h4 style="margin:0 0 8px;">电解质补充</h4>
-                    <p style="margin:0; font-size:14px; opacity:0.8;">如何缓解断食初期的头痛？</p>
+                    <h4 style="margin:0 0 8px;">电解质</h4>
+                    <p style="margin:0; font-size:14px; opacity:0.8;">如感到头晕，可尝试在水中加入微量海盐。</p>
                 </div>
             </div>
         </section>
 
-        <!-- Profile Section -->
         <section id="profile" class="section">
             <h2>个人中心</h2>
             <div class="bento-grid">
                 <div class="bento-card full-width">
-                    <h3>连续天数网格</h3>
-                    <div class="grid-circles">
-                        <div class="circle active"></div><div class="circle active"></div><div class="circle active"></div><div class="circle active"></div>
-                        <div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div>
-                        <div class="circle"></div><div class="circle"></div><div class="circle"></div><div class="circle"></div>
-                        <div class="circle"></div><div class="circle"></div>
+                    <h3>达标网格</h3>
+                    <div class="grid-circles" id="streak-grid">
                     </div>
                 </div>
-                <div class="bento-card full-width">
-                    <h3>设置</h3>
-                    <div style="margin-top:10px;">通知提醒、健康应用同步...</div>
+                <div class="bento-card full-width" onclick="clearAllData()">
+                    <h3 style="color:#ff3b30;">危险区域</h3>
+                    <div style="margin-top:10px; font-size:14px;">清除所有本地存储的数据...</div>
                 </div>
             </div>
         </section>
 
-        <!-- Modals -->
         <div id="planPicker" class="modal">
             <div class="modal-content">
                 <h3>选择断食计划</h3>
@@ -372,20 +381,19 @@
                     <button class="btn btn-secondary" onclick="setPlan(20)">20:4</button>
                     <button class="btn btn-secondary" onclick="setPlan(23)">23:1 (OMAD)</button>
                 </div>
-                <button class="btn btn-primary" style="width:100%; margin-top:20px;" onclick="closeModals()">关闭</button>
+                <button class="btn btn-primary" style="width:100%; margin-top:20px;" onclick="closeModals()">确定</button>
             </div>
         </div>
 
         <div id="weightModal" class="modal">
             <div class="modal-content">
                 <h3>记录今日体重</h3>
-                <input type="number" id="weightInput" placeholder="kg" style="width:100%; padding:16px; border-radius:16px; border:1px solid var(--glass-border); background:var(--emerald-bg); font-size:20px; text-align:center; margin:20px 0;">
-                <button class="btn btn-primary" style="width:100%;" onclick="logWeight()">确认记录</button>
+                <input type="number" id="weightInput" step="0.1" placeholder="kg" style="width:100%; padding:18px; border-radius:18px; border:1px solid var(--glass-border); background:rgba(0,122,255,0.05); font-size:24px; text-align:center; margin:20px 0; outline:none; color:var(--primary);">
+                <button class="btn btn-primary" style="width:100%;" onclick="logWeight()">确认</button>
                 <button class="btn btn-secondary" style="width:100%; margin-top:12px;" onclick="closeModals()">取消</button>
             </div>
         </div>
 
-        <!-- Navigation -->
         <nav id="nav-tabs">
             <div class="tab-item active" onclick="showTab('dashboard')">
                 <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -407,10 +415,38 @@
     </div>
 
     <script>
-        let timerSeconds = 16 * 3600;
-        let currentSeconds = timerSeconds;
-        let isRunning = false;
+        // State Management
+        let state = {
+            timerSeconds: 16 * 3600,
+            startTime: null,
+            isRunning: false,
+            weights: JSON.parse(localStorage.getItem('weights') || '[]'),
+            streaks: JSON.parse(localStorage.getItem('streaks') || '[]'),
+            currentPlan: parseInt(localStorage.getItem('plan') || '16')
+        };
+
         let interval;
+        let chartInstance = null;
+
+        function saveState() {
+            localStorage.setItem('weights', JSON.stringify(state.weights));
+            localStorage.setItem('streaks', JSON.stringify(state.streaks));
+            localStorage.setItem('plan', state.currentPlan.toString());
+            if (state.startTime) localStorage.setItem('startTime', state.startTime);
+            else localStorage.removeItem('startTime');
+        }
+
+        function loadState() {
+            const savedStartTime = localStorage.getItem('startTime');
+            if (savedStartTime) {
+                state.startTime = parseInt(savedStartTime);
+                state.isRunning = true;
+                state.timerSeconds = state.currentPlan * 3600;
+                startTimerInterval();
+            }
+            updatePlanDisplay();
+            renderGrid();
+        }
 
         function showTab(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -422,41 +458,83 @@
 
         function toggleTimer() {
             const btn = document.getElementById('main-btn');
-            const status = document.getElementById('timer-status');
-            if (isRunning) {
-                clearInterval(interval);
-                btn.innerText = '启动';
-                status.innerText = '已暂停';
+            if (state.isRunning) {
+                stopTimer();
+                btn.innerText = '开始断食';
+                btn.classList.replace('btn-secondary', 'btn-primary');
             } else {
-                interval = setInterval(updateTimer, 1000);
-                btn.innerText = '暂停';
-                status.innerText = '正在断食';
+                startTimer();
+                btn.innerText = '结束断食';
+                btn.classList.replace('btn-primary', 'btn-secondary');
             }
-            isRunning = !isRunning;
-            if (window.navigator.vibrate) window.navigator.vibrate(20);
+            if (window.navigator.vibrate) window.navigator.vibrate(25);
         }
 
-        function updateTimer() {
-            if (currentSeconds > 0) {
-                currentSeconds--;
-                renderTimer();
+        function startTimer() {
+            state.startTime = Date.now();
+            state.isRunning = true;
+            state.timerSeconds = state.currentPlan * 3600;
+            saveState();
+            startTimerInterval();
+        }
+
+        function stopTimer() {
+            const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+            if (elapsed >= state.timerSeconds) {
+                state.streaks.push(new Date().toDateString());
+                alert('🎉 恭喜！你已完成本次断食目标。');
             } else {
-                clearInterval(interval);
-                alert('断食完成！');
+                if(!confirm('目标尚未达成，确定要提前结束吗？')) return;
             }
+            
+            state.isRunning = false;
+            state.startTime = null;
+            clearInterval(interval);
+            saveState();
+            renderTimer();
+            renderGrid();
+        }
+
+        function startTimerInterval() {
+            renderTimer();
+            interval = setInterval(renderTimer, 1000);
+            document.getElementById('main-btn').innerText = '结束断食';
+            document.getElementById('main-btn').classList.replace('btn-primary', 'btn-secondary');
         }
 
         function renderTimer() {
-            const h = Math.floor(currentSeconds / 3600);
-            const m = Math.floor((currentSeconds % 3600) / 60);
-            const s = currentSeconds % 60;
-            document.getElementById('display-time').innerText = 
-                `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-            
+            const status = document.getElementById('timer-status');
+            const display = document.getElementById('display-time');
             const ring = document.getElementById('timer-progress');
-            const total = 816.8;
-            const offset = total - (currentSeconds / timerSeconds) * total;
-            ring.style.strokeDashoffset = offset;
+            const bio = document.getElementById('bio-stage');
+            
+            if (!state.isRunning) {
+                display.innerText = `${state.currentPlan.toString().padStart(2,'0')}:00:00`;
+                ring.style.strokeDashoffset = 848.2;
+                status.innerText = '准备开始';
+                bio.innerText = '断食准备中：建议在开始前摄入充足的水分。';
+                return;
+            }
+
+            const now = Date.now();
+            const elapsed = Math.floor((now - state.startTime) / 1000);
+            const remaining = Math.max(0, state.timerSeconds - elapsed);
+            
+            const h = Math.floor(elapsed / 3600);
+            const m = Math.floor((elapsed % 3600) / 60);
+            const s = elapsed % 60;
+            display.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            
+            const total = 848.2;
+            const progress = Math.min(1, elapsed / state.timerSeconds);
+            ring.style.strokeDashoffset = total - (progress * total);
+            
+            status.innerText = elapsed >= state.timerSeconds ? '已达成目标' : '正在断食中';
+            
+            // Bio Stage Logic
+            if (h < 12) bio.innerText = '血糖平稳期：身体正在消耗最后一餐的能量。';
+            else if (h < 18) bio.innerText = '燃脂加速期：胰岛素降至低点，酮体开始产生。';
+            else bio.innerText = '自噬启动期：身体开始清理受损细胞，代谢效率提升。';
         }
 
         function openPlanPicker() { document.getElementById('planPicker').classList.add('active'); }
@@ -464,40 +542,112 @@
         function closeModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
 
         function setPlan(hours) {
-            timerSeconds = hours * 3600;
-            currentSeconds = timerSeconds;
-            document.getElementById('target-plan').innerText = `${hours}:${24-hours}`;
+            if (state.isRunning && !confirm('正在断食中，更换计划将重置当前进度。继续吗？')) return;
+            state.currentPlan = hours;
+            state.timerSeconds = hours * 3600;
+            state.isRunning = false;
+            state.startTime = null;
+            clearInterval(interval);
+            updatePlanDisplay();
+            saveState();
             renderTimer();
             closeModals();
         }
 
+        function updatePlanDisplay() {
+            document.getElementById('target-plan').innerText = `${state.currentPlan}:${24-state.currentPlan}`;
+        }
+
         function logWeight() {
-            const val = document.getElementById('weightInput').value;
+            const val = parseFloat(document.getElementById('weightInput').value);
             if(val) {
-                alert(`已记录: ${val} kg`);
+                state.weights.push({ date: new Date().toLocaleDateString('zh-CN', {month:'short', day:'numeric'}), value: val });
+                if(state.weights.length > 7) state.weights.shift();
+                saveState();
                 closeModals();
-                initChart();
+                if(document.getElementById('journey').classList.contains('active')) initChart();
             }
         }
 
         function initChart() {
             const ctx = document.getElementById('weightChart').getContext('2d');
-            new Chart(ctx, {
+            if(chartInstance) chartInstance.destroy();
+            
+            const data = state.weights.length > 0 ? state.weights : [
+                {date:'周一', value:72.5}, {date:'周二', value:72.3}, {date:'周三', value:72.1}, 
+                {date:'周四', value:72.0}, {date:'周五', value:71.8}, {date:'周六', value:71.9}, {date:'周日', value:71.6}
+            ];
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(0, 122, 255, 0.3)');
+            gradient.addColorStop(1, 'rgba(0, 122, 255, 0.0)');
+
+            chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    labels: data.map(d => d.date),
                     datasets: [{
                         label: '体重 (kg)',
-                        data: [72.5, 72.3, 72.1, 72.0, 71.8, 71.9, 71.6],
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        data: data.map(d => d.value),
+                        borderColor: '#007aff',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#007aff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        backgroundColor: gradient,
                         fill: true,
                         tension: 0.4
                     }]
                 },
-                options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false } } }
+                options: { 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        y: { 
+                            grid: { display: false },
+                            ticks: { color: '#8e8e93' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#8e8e93' }
+                        }
+                    }
+                }
             });
         }
+
+        function renderGrid() {
+            const grid = document.getElementById('streak-grid');
+            grid.innerHTML = '';
+            for(let i=0; i<14; i++) {
+                const div = document.createElement('div');
+                div.className = 'circle' + (i < state.streaks.length ? ' active' : '');
+                grid.appendChild(div);
+            }
+            document.getElementById('streak-count').innerText = `${state.streaks.length} 天`;
+        }
+
+        function clearAllData() {
+            if(confirm('确定要清除所有记录吗？此操作不可撤销。')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW Registered'))
+                    .catch(err => console.log('SW Failed', err));
+            });
+        }
+
+        // Initialize
+        loadState();
     </script>
 </body>
 </html>
